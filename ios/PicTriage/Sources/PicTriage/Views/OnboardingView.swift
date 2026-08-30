@@ -11,6 +11,13 @@ struct OnboardingView: View {
         VStack(alignment: .leading, spacing: 24) {
             Spacer(minLength: 0)
 
+            Image("AppLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 76, height: 76)
+                .clipShape(RoundedRectangle(cornerRadius: 17))
+                .shadow(color: Theme.cardShadow.opacity(0.18), radius: 10, x: 0, y: 4)
+
             VStack(alignment: .leading, spacing: 10) {
                 Text("Welcome to PicTriage")
                     .font(.heading(28))
