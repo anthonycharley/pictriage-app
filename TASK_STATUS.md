@@ -164,6 +164,32 @@ asset (`#FDF3E4`, matching `Theme.screenBackground`) and set `UIColorName: Launc
 which is the standard/recommended pattern. Verified via cold `simctl terminate` + `launch`, no
 crash, correct Info.plist generated.
 
+### Real-device testing feedback (2026-08-30, from the user's own iPhone)
+First real-device pass surfaced several issues Simulator testing hadn't caught. User asked to fix
+these **one at a time**, confirming before moving to the next — do not batch-fix the rest without
+checking in first. Status:
+
+1. ~~**Onboarding felt cold, no logo.**~~ Fixed — added the PT Monogram app icon above "Welcome to
+   PicTriage" (new `AppLogo` image asset; `AppIcon`'s catalog entry isn't reliably loadable via
+   plain `Image()` in SwiftUI, hence a separate asset rather than reusing the App Icon set).
+2. **Preview screen has excess empty space at the top on a real device** — doesn't fit the screen
+   naturally. Not yet investigated; Simulator testing never caught this, so likely a real-device
+   safe-area/notch difference from what Simulator reports. **Not started.**
+3. **No swipe gesture in the photo preview** — currently only the left/right chevron buttons
+   navigate between photos; user wants to swipe left/right too. **Not started.**
+4. **Preview reliability**: sometimes the photo doesn't render in the preview at all; sometimes
+   tapping a photo to open the preview does nothing / the screen just freezes. Intermittent,
+   real-device only so far. **Not started** — likely worth checking `PhotoThumbnailView`'s async
+   loading path and whatever's different about a real device's `PHCachingImageManager` timing vs.
+   Simulator's.
+5. **Remove "Keep the best" auto-flagging** — the heuristic that marks one photo in a duplicate
+   group as the "best" shot is judged too inaccurate to ship; user wants it removed for now, not
+   fixed. **Not started** — touches `PhotoLibraryService`'s grouping logic, `Photo.best`, and every
+   view that reads it (`DetailGridView`'s badge/ring, `PreviewOverlayView`'s "flagged as the best
+   of this set" line, `ReviewListView`'s "Queue rest" vs. "Queue all" / "keeps the best shot" copy).
+6. **Slight lag switching between Duplicates and Screenshots tabs.** **Not started** — worth
+   profiling before guessing at a fix.
+
 ## 3. Active Blockers
 
 ### ~~`BackButton` (non-modal screens) unresponsive~~ — False alarm, resolved
