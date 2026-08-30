@@ -110,23 +110,40 @@ Replaced all sample/fake data with a real PhotosKit backend:
 
 ## 3. Active Blockers
 
-### 🔴 Unresolved: small circular top-left buttons unresponsive to taps in Simulator testing
-While re-verifying the freeze fix, discovered that the "×" close button in the preview overlay,
-**and** the plain "‹" `BackButton` used on other, unrelated, non-modal screens
-(`ReviewListView`/`DetailGridView`/`QueueView`), did not respond to automated taps at their
-calculated position — consistently, across many careful coordinate recalculations, on both the
-newly-fixed modal and ordinary screens. Since it reproduces on completely unrelated code paths,
-this is **not** caused by the `.fullScreenCover` fix.
+### ~~`BackButton` (non-modal screens) unresponsive~~ — False alarm, resolved
+Re-tested this session with careful coordinate calibration (verified against two independently
+confirmed-working reference points on the same screens). The plain "‹" `BackButton` on
+`ReviewListView`/`DetailGridView`/`QueueView` responds correctly and reliably to tap automation —
+repeated successfully multiple times navigating Home → Duplicates → group detail → back → back.
+**The previous session's finding was a tap-coordinate-precision artifact of automation, not a real
+bug.** No code change needed here.
 
-**What we don't know:** whether this is a real SwiftUI hit-testing bug, something specific to this
-iOS 26.5 Simulator build, or purely an artifact of coordinate-based tap *automation* (vs. real
-touch/mouse input, which was never tried — we ran out of ability to test that ourselves this
-session). A same-pattern test on a second, fresh Simulator device was blocked by a permissions
-prompt we couldn't answer non-interactively.
+### 🔴 Still unresolved, now more precisely characterized: `PreviewOverlayView` topBar controls
+The "×" close button **and** the "First"/"Last" jump pills (all three live in `topBar`, the first
+row of `PreviewOverlayView`) do not respond to tap — confirmed with an extensive, deliberately
+overlapping coordinate sweep across both x and y (roughly y=95 to y=220, several x values per
+row), which rules out simple mis-targeting: the true button center falls well inside that swept
+range and nothing in it worked. Meanwhile, in the **same view**, the photoStrip chevron buttons
+and the bottom `Keep`/`Queue for deletion` buttons respond correctly and reliably at their
+computed coordinates. So this is isolated to `topBar` specifically, not the whole overlay.
 
-**Mitigation shipped:** tapping anywhere on the preview's dark background now also dismisses it
-(`PreviewOverlayView.swift`), so the preview is always closable regardless. The plain `BackButton`
-elsewhere has no such fallback yet.
+**Tried and did NOT fix it:** adding `.contentShape(Circle())` and a redundant
+`.highPriorityGesture(TapGesture())` to the × button (reverted — it didn't help and risked
+double-firing `closePreview()` on any tap that *did* land).
+
+**New finding this session — the shipped "tap background to dismiss" mitigation is unreliable,
+not solid:** tapping the dark background at (10, 900) closed the preview correctly, but identical
+background taps at (10, 462), (220, 760), and (220, 20) — all well outside any button's bounds —
+did nothing. Same gesture (`Color.black.opacity(0.82).contentShape(Rectangle()).onTapGesture`),
+different outcomes at different points. This inconsistency (not a clean "always fails" or "always
+works") suggests something coordinate- or view-hierarchy-specific that black-box tapping from
+outside the app can't fully diagnose — it likely needs Xcode's live view debugger (Debug View
+Hierarchy) on an actual running session, which isn't available from this environment.
+
+**Practical impact:** not a full lockout — `Keep` and `Queue for deletion` both correctly call
+`closePreview()` too and work reliably, so there's always a way out of the preview. But the
+"just close without acting" affordances (× button, tap-anywhere-to-dismiss, First/Last jump) are
+currently unreliable.
 
 **This is the #1 next step** — see below.
 
@@ -140,21 +157,21 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
 
 ## 4. Exact Next Steps
 
-1. **Resolve the back-button blocker, in this order:**
-   - Ask the user (or do it yourself if you have a way to click, not coordinate-tap, the
-     Simulator) to physically click the "‹" back button on any screen (e.g. Duplicates list) and
-     the preview's "×". If a **real click** works fine, the issue is specific to this session's
-     coordinate-tap automation — note that in this file and move on, no code change needed.
-   - If a real click/tap *also* fails to respond: this is a genuine bug in `Components.swift`'s
-     `BackButton`, used on 4 screens. Try, in order: (a) add `.contentShape(Rectangle())` to the
-     button's label; (b) increase its hit target size (e.g. wrap in a larger invisible tappable
-     frame); (c) try swapping `Button { }.buttonStyle(.plain)` for a `ZStack` with
-     `.onTapGesture`. Re-test after each change. If nothing works, it's worth a minimal repro and
-     an Apple Feedback / SwiftUI bug report, since this reproduced on a very recent iOS build
-     (26.5).
-   - Regardless of outcome, add the same "tap background to dismiss" — or an equivalent large
-     hit-target fallback — anywhere else `BackButton` is the *only* way back, so users are never
-     stuck.
+1. **Resolve the `PreviewOverlayView.topBar` blocker** (× close, First/Last pills — `BackButton`
+   itself is confirmed fine, see above). Black-box tap testing from outside the app has been
+   pushed as far as it usefully can — next step needs to actually see the view hierarchy:
+   - Run the app from Xcode directly (not this headless build path) and use **Debug View
+     Hierarchy** while the preview is open, to check whether some other view (system UI, a stale
+     presentation artifact, anything) is overlapping `topBar` and intercepting touches.
+   - Ask the user to physically tap the "×" and "Last" pill once for a real-touch data point —
+     everything tested this session was synthetic tap automation.
+   - If the view hierarchy looks clean and a real tap also fails: try restructuring `topBar` away
+     from being the first child of the padded `VStack` (e.g. give it its own `.zIndex()`, or move
+     the dismiss/jump actions to `.safeAreaInset(edge: .top)` instead of stacking them inside the
+     same `VStack` as everything else) and re-test each change.
+   - Regardless of root cause, `Keep` and `Queue for deletion` both work as an exit path already,
+     so this isn't a hard lockout — but worth fixing since × and tap-to-dismiss are the two
+     "just look and leave" affordances users will reach for most.
 
 2. ~~**Initialize git.**~~ Done — pushed to https://github.com/anthonycharley/pictriage-app (`main`).
 
