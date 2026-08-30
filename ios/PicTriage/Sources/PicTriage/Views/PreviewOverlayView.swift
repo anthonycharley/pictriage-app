@@ -11,13 +11,13 @@ struct PreviewOverlayView: View {
 
     var body: some View {
         if let photo = state.previewPhoto {
-            ZStack {
+            ZStack(alignment: .top) {
                 Color.black.opacity(0.82)
                     .ignoresSafeArea()
                     .contentShape(Rectangle())
                     .onTapGesture { state.closePreview() }
                 VStack(spacing: 0) {
-                    topBar
+                    Color.clear.frame(height: 34)
                     photoStrip
                         .padding(.vertical, 14)
                     VStack(alignment: .leading, spacing: 2) {
@@ -35,6 +35,10 @@ struct PreviewOverlayView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 52)
                 .padding(.bottom, 26)
+
+                topBar
+                    .padding(.horizontal, 20)
+                    .padding(.top, 52)
             }
             .transition(.opacity)
         }
