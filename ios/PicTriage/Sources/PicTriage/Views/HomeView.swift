@@ -36,12 +36,13 @@ struct HomeView: View {
                     .foregroundColor(Theme.textPrimary)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
             .background(Theme.badgeBg)
             .clipShape(RoundedRectangle(cornerRadius: 18))
-            .frame(maxWidth: 132)
+            .frame(maxWidth: 160)
         }
     }
 
