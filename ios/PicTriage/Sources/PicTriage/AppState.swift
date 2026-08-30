@@ -32,9 +32,29 @@ final class AppState: ObservableObject {
     @Published var authStatus: LibraryAuthStatus = .notGranted
     @Published var scanning: Bool = false
     @Published var lastScanText: String = String(localized: "never")
-    @Published var remindOn: Bool = false { didSet { persistPrefs() } }
-    @Published var remindDay: String = "Sunday" { didSet { persistPrefs() } }
-    @Published var remindTime: String = "10:00 AM" { didSet { persistPrefs() } }
+    @Published var remindOn: Bool = false {
+        didSet {
+            persistPrefs()
+            guard remindOn != oldValue else { return }
+            if remindOn {
+                Task { [weak self] in await self?.enableReminder() }
+            } else {
+                NotificationScheduler.cancel()
+            }
+        }
+    }
+    @Published var remindDay: String = "Sunday" {
+        didSet {
+            persistPrefs()
+            if remindOn { NotificationScheduler.scheduleWeekly(day: remindDay, time: remindTime) }
+        }
+    }
+    @Published var remindTime: String = "10:00 AM" {
+        didSet {
+            persistPrefs()
+            if remindOn { NotificationScheduler.scheduleWeekly(day: remindDay, time: remindTime) }
+        }
+    }
     @Published var scanCleared: Bool = false
     @Published var howDeleteOpen: Bool = false
 
@@ -48,6 +68,9 @@ final class AppState: ObservableObject {
         authStatus = PhotoLibraryService.shared.currentStatus()
         if authStatus != .notGranted {
             Task { await runScan() }
+        }
+        if remindOn {
+            NotificationScheduler.scheduleWeekly(day: remindDay, time: remindTime)
         }
     }
 
@@ -140,7 +163,7 @@ final class AppState: ObservableObject {
     /// Days and times are stored internally as fixed canonical English
     /// identifiers/strings (for state comparison — see `SettingsView`'s day
     /// and time chips) and only localized for display, via these two helpers.
-    static let canonicalWeekdayOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    nonisolated static let canonicalWeekdayOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     static func localizedWeekdayName(_ canonical: String, short: Bool = false) -> String {
         guard let index = canonicalWeekdayOrder.firstIndex(of: canonical) else { return canonical }
@@ -328,8 +351,15 @@ final class AppState: ObservableObject {
         flash(String(localized: "Local scan index cleared. Your photos are untouched."))
     }
 
-    func openPolicy() { flash(String(localized: "Opens the privacy policy in Safari.")) }
-    func rateApp() { flash(String(localized: "Opens the App Store review sheet.")) }
+    private func enableReminder() async {
+        let granted = await NotificationScheduler.requestAuthorization()
+        if granted {
+            NotificationScheduler.scheduleWeekly(day: remindDay, time: remindTime)
+        } else {
+            remindOn = false
+            flash(String(localized: "Enable notifications for PicTriage in iOS Settings to turn this on."))
+        }
+    }
 
     // MARK: - Persistence
 

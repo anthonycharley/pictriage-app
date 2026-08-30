@@ -14,7 +14,8 @@ targets:
     info:
       path: Generated/Info.plist
       properties:
-        UILaunchScreen: {}
+        UILaunchScreen:
+          UIColorName: LaunchBackground
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         NSPhotoLibraryUsageDescription: "PicTriage scans your photo library on-device to find duplicates and screenshots you can clean up. Nothing ever leaves your phone."

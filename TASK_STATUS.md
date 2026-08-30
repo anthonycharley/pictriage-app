@@ -118,6 +118,35 @@ for the old full icon-size matrix). `project.yml` now sets
 `ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon`. Verified showing correctly on the Simulator Home
 Screen with iOS's own squircle mask applied.
 
+### Settings rows — real implementations, no more fakes (this session)
+All three previously-fake Settings rows now do what they say:
+- **Weekly cleanup reminder** — `NotificationScheduler.swift` (new) requests real
+  `UNUserNotificationCenter` authorization and schedules an actual repeating
+  `UNCalendarNotificationTrigger` matching the selected day/time. Toggling off cancels it;
+  changing day/time reschedules it; permission denial reverts the toggle and flashes a message
+  pointing to iOS Settings. No Info.plist/entitlement changes needed — local notifications only
+  need runtime authorization. Verified via `xcrun simctl ... log show`: authorization grant,
+  add/remove/re-add on every day and time change, and clean cancel-with-no-reschedule on toggle
+  off, all with `hasError: 0`.
+- **Rate PicTriage** — now calls SwiftUI's `@Environment(\.requestReview)` (StoreKit,
+  iOS 16+-native) instead of a fake toast. Verified: triggers the real system
+  "Enjoying PicTriage? Tap a star to rate it" sheet.
+- **Privacy policy** — real in-app policy at `Views/PrivacyPolicyView.swift`, presented as a
+  sheet — no hosted URL needed. Content double-checked against the actual codebase (grepped for
+  `URLSession`/analytics SDKs — none exist) before writing any claims, so "nothing leaves your
+  device" is verified true, not just asserted.
+
+**Note:** Apple's App Store Connect submission flow itself still wants a *hosted* privacy policy
+URL for the store listing metadata (separate from this in-app screen) — worth remembering when
+you get to that step, this doesn't fully replace it.
+
+### Launch screen (this session)
+Was `UILaunchScreen: {}` (blank white flash on cold start). Added a `LaunchBackground` color
+asset (`#FDF3E4`, matching `Theme.screenBackground`) and set `UIColorName: LaunchBackground` in
+`project.yml`'s `UILaunchScreen` block — no custom image, just a color-matched blank screen,
+which is the standard/recommended pattern. Verified via cold `simctl terminate` + `launch`, no
+crash, correct Info.plist generated.
+
 ## 3. Active Blockers
 
 ### ~~`BackButton` (non-modal screens) unresponsive~~ — False alarm, resolved
@@ -199,12 +228,7 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
    backend "done," run on a physical iPhone at least once — PhotosKit permission flows and
    thumbnail loading in particular can behave subtly differently than in Simulator.
 
-4. **Decide on remaining stubs** (not blockers, just undone; ask the user which matter for a first
-   real build):
-   - Weekly reminder notifications aren't scheduled — the Settings toggle/day/time UI works but
-     doesn't call `UNUserNotificationCenter`.
-   - "Rate PicTriage" and "Privacy policy" rows just flash a toast instead of opening
-     `SKStoreReviewController` / a real URL.
+4. ~~Fake settings rows~~ Done — see above. **Still remaining, lower priority:**
    - Settings' time picker uses 6 fixed English-formatted preset strings reformatted for display
      (`AppState.localizedTimeLabel`), not real `Date` values — fine for a v1, but a proper
      device-language build should probably replace it with an actual `DatePicker` or
@@ -212,6 +236,8 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
    - Duplicate detection is a burst-ID + 8-second-window heuristic, not ML/perceptual-hash based
      (documented up front as a deliberate simplification) — revisit with
      `VNGenerateImageFeaturePrintRequest` if real-world testing shows it misses too much.
+   - A *hosted* privacy policy URL is still needed for App Store Connect's own listing metadata
+     (separate from the in-app screen added this session).
 
 5. **Localization follow-ups**, lower priority:
    - Get the 4 existing translations (es/fr/de/zh-Hans) reviewed by an actual speaker before wide
@@ -220,8 +246,8 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
      in `String(localized:)`, add a matching key to each `Localizable.strings`) is already in
      place and mechanical to extend.
 
-6. ~~App icon~~ Done — see below. **Still not started:** launch screen content, App Store
-   metadata/screenshots, TestFlight setup.
+6. ~~App icon~~ ~~Launch screen~~ Done — see above/below. **Still not started:** App Store
+   metadata/screenshots, TestFlight setup, hosted privacy policy URL.
 
 ---
 
@@ -237,6 +263,8 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
 | `ios/PicTriage/Sources/PicTriage/Views/PreviewOverlayView.swift` | Full-screen preview (site of both bug fixes + open blocker) |
 | `ios/PicTriage/Sources/PicTriage/Views/Components.swift` | `BackButton` — the component at the center of the open blocker |
 | `ios/PicTriage/Sources/PicTriage/Views/OnboardingView.swift` | Name-capture first-launch screen |
+| `ios/PicTriage/Sources/PicTriage/NotificationScheduler.swift` | Real weekly reminder scheduling |
+| `ios/PicTriage/Sources/PicTriage/Views/PrivacyPolicyView.swift` | In-app privacy policy sheet |
 | `ios/PicTriage/Sources/PicTriage/Formatting.swift` | Locale-aware number formatting |
 | `ios/PicTriage/Sources/PicTriage/{es,fr,de,zh-Hans}.lproj/Localizable.strings` | Translations |
 | `ios/PicTriage/project.yml` | XcodeGen spec (note the `info.path` requirement, see §2) |

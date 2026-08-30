@@ -1,7 +1,10 @@
 import SwiftUI
+import StoreKit
 
 struct SettingsView: View {
     @EnvironmentObject var state: AppState
+    @Environment(\.requestReview) private var requestReview
+    @State private var showPrivacyPolicy = false
 
     private static let accessOptions = ["Full Access", "Selected Photos", "Not Granted"]
     private static let dayOptions = AppState.canonicalWeekdayOrder
@@ -37,6 +40,9 @@ struct SettingsView: View {
             .padding(.top, 16)
             .padding(.bottom, 130)
             .animation(.easeOut(duration: 0.2), value: state.remindOn)
+        }
+        .sheet(isPresented: $showPrivacyPolicy) {
+            PrivacyPolicyView()
         }
     }
 
@@ -222,7 +228,7 @@ struct SettingsView: View {
         card {
             VStack(spacing: 0) {
                 Button {
-                    state.openPolicy()
+                    showPrivacyPolicy = true
                 } label: {
                     row(
                         title: String(localized: "Privacy policy"),
@@ -282,7 +288,7 @@ struct SettingsView: View {
                 }
                 HairlineDivider()
                 Button {
-                    state.rateApp()
+                    requestReview()
                 } label: {
                     row(
                         title: String(localized: "Rate PicTriage"),
