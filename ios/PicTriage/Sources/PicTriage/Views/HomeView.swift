@@ -69,6 +69,7 @@ struct HomeView: View {
                 .font(.heading(15, weight: .bold))
                 .foregroundColor(Color(hex: "4a4038"))
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(18)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 22))
