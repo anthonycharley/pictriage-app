@@ -140,6 +140,23 @@ All three previously-fake Settings rows now do what they say:
 URL for the store listing metadata (separate from this in-app screen) — worth remembering when
 you get to that step, this doesn't fully replace it.
 
+### Weekly reminder time is now a real scrollable picker (this session)
+User feedback: the 5 fixed preset time chips (9/10/12/6/8) should be a real scrollable time
+picker instead. Replaced with SwiftUI's native `DatePicker(.compact)` — tapping it pops up the
+standard iOS wheel (hour / minute / AM-PM columns), matching the request exactly. This required a
+real data-model change, not just a UI swap:
+- `AppState.remindTime` changed from a fixed English string (`"10:00 AM"`) to a real `Date` (only
+  its hour/minute are used) — `AppState.localizedTimeLabel` is gone, display now just uses a
+  locale-aware `DateFormatter`.
+- `NotificationScheduler.scheduleWeekly` takes `time: Date` now instead of parsing a canonical
+  string.
+- `PersistedPrefs`'s decoder handles both formats: tries the new `Date` first, falls back to
+  parsing the old `"h:mm a"` string for anyone who had the old build installed, then falls back to
+  a default — so existing users don't get silently reset (the same class of bug documented earlier
+  this file under "Persistence backward-compatibility bug").
+Verified: picker opens the real system wheel, and the change is a locale-aware `DateFormatter`
+away from working correctly in any language, unlike the old fixed-English-string approach.
+
 ### Launch screen (this session)
 Was `UILaunchScreen: {}` (blank white flash on cold start). Added a `LaunchBackground` color
 asset (`#FDF3E4`, matching `Theme.screenBackground`) and set `UIColorName: LaunchBackground` in
@@ -228,11 +245,8 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
    backend "done," run on a physical iPhone at least once — PhotosKit permission flows and
    thumbnail loading in particular can behave subtly differently than in Simulator.
 
-4. ~~Fake settings rows~~ Done — see above. **Still remaining, lower priority:**
-   - Settings' time picker uses 6 fixed English-formatted preset strings reformatted for display
-     (`AppState.localizedTimeLabel`), not real `Date` values — fine for a v1, but a proper
-     device-language build should probably replace it with an actual `DatePicker` or
-     `Date`-backed values.
+4. ~~Fake settings rows~~ ~~Fixed-preset time picker~~ Done — see above/below. **Still
+   remaining, lower priority:**
    - Duplicate detection is a burst-ID + 8-second-window heuristic, not ML/perceptual-hash based
      (documented up front as a deliberate simplification) — revisit with
      `VNGenerateImageFeaturePrintRequest` if real-world testing shows it misses too much.

@@ -49,7 +49,7 @@ final class AppState: ObservableObject {
             if remindOn { NotificationScheduler.scheduleWeekly(day: remindDay, time: remindTime) }
         }
     }
-    @Published var remindTime: String = "10:00 AM" {
+    @Published var remindTime: Date = Calendar.current.date(from: DateComponents(hour: 10, minute: 0)) ?? Date() {
         didSet {
             persistPrefs()
             if remindOn { NotificationScheduler.scheduleWeekly(day: remindDay, time: remindTime) }
@@ -160,9 +160,11 @@ final class AppState: ObservableObject {
     }
     var ringProgress: Double { min(Double(reviewed), 25) / 25 }
 
-    /// Days and times are stored internally as fixed canonical English
-    /// identifiers/strings (for state comparison — see `SettingsView`'s day
-    /// and time chips) and only localized for display, via these two helpers.
+    /// Days are stored internally as fixed canonical English identifiers
+    /// (for state comparison — see `SettingsView`'s day chips) and only
+    /// localized for display, via this helper. Times are stored as a real
+    /// `Date` (only its hour/minute matter) so the picker and notification
+    /// scheduler both work in the device's actual locale/format directly.
     nonisolated static let canonicalWeekdayOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     static func localizedWeekdayName(_ canonical: String, short: Bool = false) -> String {
@@ -171,24 +173,18 @@ final class AppState: ObservableObject {
         return symbols.indices.contains(index) ? symbols[index] : canonical
     }
 
-    /// `canonical` is a fixed-format time like "10:00 AM" (see `SettingsView`'s
-    /// `timeOptions`), reformatted for display in the device's locale.
-    static func localizedTimeLabel(_ canonical: String) -> String {
-        let parser = DateFormatter()
-        parser.locale = Locale(identifier: "en_US_POSIX")
-        parser.dateFormat = "h:mm a"
-        guard let date = parser.date(from: canonical) else { return canonical }
-        let display = DateFormatter()
-        display.dateStyle = .none
-        display.timeStyle = .short
-        return display.string(from: date)
-    }
-
     var localizedRemindDayName: String { Self.localizedWeekdayName(remindDay) }
+
+    private var localizedRemindTimeText: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: remindTime)
+    }
 
     var remindHintText: String {
         remindOn
-            ? String(localized: "Every \(localizedRemindDayName) at \(Self.localizedTimeLabel(remindTime))")
+            ? String(localized: "Every \(localizedRemindDayName) at \(localizedRemindTimeText)")
             : String(localized: "Off — no nudges unless you turn this on")
     }
 
@@ -375,11 +371,11 @@ final class AppState: ObservableObject {
         var lastScanText: String
         var remindOn: Bool
         var remindDay: String
-        var remindTime: String
+        var remindTime: Date
         var userName: String = ""
         var hasOnboarded: Bool = false
 
-        init(reviewed: Int, dayOf: Int, freedGb: Double, lastScanText: String, remindOn: Bool, remindDay: String, remindTime: String, userName: String, hasOnboarded: Bool) {
+        init(reviewed: Int, dayOf: Int, freedGb: Double, lastScanText: String, remindOn: Bool, remindDay: String, remindTime: Date, userName: String, hasOnboarded: Bool) {
             self.reviewed = reviewed
             self.dayOf = dayOf
             self.freedGb = freedGb
@@ -399,7 +395,19 @@ final class AppState: ObservableObject {
             lastScanText = try c.decodeIfPresent(String.self, forKey: .lastScanText) ?? String(localized: "never")
             remindOn = try c.decodeIfPresent(Bool.self, forKey: .remindOn) ?? false
             remindDay = try c.decodeIfPresent(String.self, forKey: .remindDay) ?? "Sunday"
-            remindTime = try c.decodeIfPresent(String.self, forKey: .remindTime) ?? "10:00 AM"
+            let defaultTime = Calendar.current.date(from: DateComponents(hour: 10, minute: 0)) ?? Date()
+            if let date = try? c.decode(Date.self, forKey: .remindTime) {
+                // Current format: a real Date (only hour/minute are used).
+                remindTime = date
+            } else if let legacyLabel = try? c.decode(String.self, forKey: .remindTime) {
+                // Pre-DatePicker format was a fixed string like "10:00 AM".
+                let parser = DateFormatter()
+                parser.locale = Locale(identifier: "en_US_POSIX")
+                parser.dateFormat = "h:mm a"
+                remindTime = parser.date(from: legacyLabel) ?? defaultTime
+            } else {
+                remindTime = defaultTime
+            }
             userName = try c.decodeIfPresent(String.self, forKey: .userName) ?? ""
             hasOnboarded = try c.decodeIfPresent(Bool.self, forKey: .hasOnboarded) ?? false
         }

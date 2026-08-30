@@ -43,7 +43,6 @@ enum Theme {
     static let stripeDark = Color(hex: "E4D8C6")
 
     static let segmentBg = Color(hex: "F7EEDF")
-    static let timeBorderOn = Color(hex: "E8B463")
     static let dividerLine = Color(hex: "F4EADA")
     static let chevron = Color(hex: "C0B3A3")
     static let remindOffTrack = Color(hex: "DFD3C1")

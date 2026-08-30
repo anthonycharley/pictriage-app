@@ -8,7 +8,6 @@ struct SettingsView: View {
 
     private static let accessOptions = ["Full Access", "Selected Photos", "Not Granted"]
     private static let dayOptions = AppState.canonicalWeekdayOrder
-    private static let timeOptions = ["9:00 AM", "10:00 AM", "12:00 PM", "6:00 PM", "8:00 PM"]
 
     var body: some View {
         ScrollView {
@@ -189,7 +188,7 @@ struct SettingsView: View {
                         .font(.heading(12))
                         .tracking(0.6)
                         .foregroundColor(Theme.labelMuted)
-                    timeChips
+                    timePicker
                 }
             }
             .padding(14)
@@ -197,29 +196,26 @@ struct SettingsView: View {
         .padding(.top, -6)
     }
 
-    private var timeChips: some View {
-        // Approximates the design's flex-wrap chip row.
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80), spacing: 6)], alignment: .leading, spacing: 6) {
-            ForEach(Self.timeOptions, id: \.self) { label in
-                let on = state.remindTime == label
-                Button {
-                    state.remindTime = label
-                } label: {
-                    Text(AppState.localizedTimeLabel(label))
-                        .font(.heading(13))
-                        .foregroundColor(on ? Theme.quickAmountText : Theme.textSecondary)
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 9)
-                        .background(on ? Theme.quickAmountBg : Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(on ? Theme.timeBorderOn : Theme.cardBorder, lineWidth: 1.5)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-                .buttonStyle(.plain)
-            }
-        }
+    /// A real, scrollable time-of-day picker (tap to pop up the standard
+    /// iOS wheel) instead of a fixed set of preset times.
+    private var timePicker: some View {
+        DatePicker(
+            "",
+            selection: $state.remindTime,
+            displayedComponents: .hourAndMinute
+        )
+        .datePickerStyle(.compact)
+        .labelsHidden()
+        .tint(Theme.accent)
+        .fixedSize()
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Theme.cardBorder, lineWidth: 1.5)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     // MARK: Privacy

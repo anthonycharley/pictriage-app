@@ -18,14 +18,15 @@ enum NotificationScheduler {
     }
 
     /// Replaces any previously scheduled reminder with one for the given
-    /// canonical day/time (see `AppState.canonicalWeekdayOrder` /
-    /// `SettingsView.timeOptions` for the exact string formats expected).
-    static func scheduleWeekly(day: String, time: String) {
+    /// canonical day (see `AppState.canonicalWeekdayOrder`) and time of day
+    /// (only `time`'s hour/minute components are used).
+    static func scheduleWeekly(day: String, time: Date) {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [identifier])
 
-        guard let weekdayIndex = AppState.canonicalWeekdayOrder.firstIndex(of: day),
-              let (hour, minute) = parseTime(time) else { return }
+        guard let weekdayIndex = AppState.canonicalWeekdayOrder.firstIndex(of: day) else { return }
+        let timeComps = Calendar.current.dateComponents([.hour, .minute], from: time)
+        guard let hour = timeComps.hour, let minute = timeComps.minute else { return }
 
         var dateComponents = DateComponents()
         dateComponents.weekday = weekdayIndex + 1 // Calendar weekday: Sunday = 1 ... Saturday = 7
@@ -34,7 +35,7 @@ enum NotificationScheduler {
 
         let content = UNMutableNotificationContent()
         content.title = String(localized: "Time for a cleanup sprint")
-        content.body = String(localized: "A few minutes now keeps your library tidy \u{2014} pick up where you left off.")
+        content.body = String(localized: "A few minutes now keeps your library tidy. Pick up where you left off.")
         content.sound = .default
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
@@ -44,15 +45,5 @@ enum NotificationScheduler {
 
     static func cancel() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-    }
-
-    private static func parseTime(_ canonical: String) -> (hour: Int, minute: Int)? {
-        let parser = DateFormatter()
-        parser.locale = Locale(identifier: "en_US_POSIX")
-        parser.dateFormat = "h:mm a"
-        guard let date = parser.date(from: canonical) else { return nil }
-        let comps = Calendar.current.dateComponents([.hour, .minute], from: date)
-        guard let hour = comps.hour, let minute = comps.minute else { return nil }
-        return (hour, minute)
     }
 }
