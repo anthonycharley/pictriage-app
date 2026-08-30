@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<![CDATA[<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#e8e2d8;font-family:Nunito,system-ui,sans-serif}
+a{color:#E07A29}a:hover{color:#c96718}
+@keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;box-sizing:border-box">
+  <div style="position:relative;width:390px;height:844px;border-radius:46px;background:#FDF3E4;box-shadow:0 30px 80px rgba(60,40,20,.25),0 0 0 11px #17130f,0 0 0 12px #3a332c;overflow:hidden;display:flex;flex-direction:column">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 30px 0;font-size:13px;font-weight:800;color:#241f1b;letter-spacing:.2px;flex:none">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <span style="width:16px;height:9px;border:1.5px solid #241f1b;border-radius:2.5px;display:inline-block"></span>
+        <span style="width:5px;height:9px;background:#241f1b;border-radius:1px;display:inline-block"></span>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;overflow:hidden;padding:18px 22px 0;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <div>
+            <div style="font-size:26px;font-weight:900;color:#241f1b;letter-spacing:-.6px;line-height:1.15">Good morning, Alex</div>
+            <div style="font-size:14.5px;font-weight:600;color:#8b7d6d;margin-top:3px">Let’s clear some space today</div>
+          </div>
+          <div style="flex:none;display:flex;align-items:center;gap:7px;background:#F7E7CE;border-radius:18px;padding:8px 12px;margin-top:4px;max-width:132px">
+            <span style="font-size:14px">🔥</span>
+            <span style="font-size:12.5px;font-weight:800;color:#241f1b;line-height:1.2">{{ sprintBadge }}</span>
+          </div>
+        </div>
+
+        <div style="background:#fff;border-radius:22px;padding:18px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 10px rgba(120,90,50,.07)">
+          <div style="position:relative;width:104px;height:104px;flex:none">
+            <svg width="104" height="104" viewBox="0 0 104 104" style="transform:rotate(-90deg)">
+              <circle cx="52" cy="52" r="44" fill="none" stroke="#F4EADA" stroke-width="12"></circle>
+              <circle cx="52" cy="52" r="44" fill="none" stroke="#E89B1C" stroke-width="12" stroke-linecap="round" stroke-dasharray="{{ ringDash }}"></circle>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+              <div style="font-size:27px;font-weight:900;color:#241f1b;line-height:1">{{ reviewed }}</div>
+              <div style="font-size:11.5px;font-weight:700;color:#9c8d7c">of 25</div>
+            </div>
+          </div>
+          <div style="font-size:15px;font-weight:700;color:#4a4038;line-height:1.35">{{ reviewed }} of 25 photos reviewed today.<br>{{ goalTail }}</div>
+        </div>
+
+        <div style="position:relative;border-radius:22px;padding:18px 20px;background:linear-gradient(105deg,#F0A63C,#F4855F 62%,#EE6F86);overflow:hidden">
+          <div style="position:absolute;right:22px;top:16px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.5)"></div>
+          <div style="position:absolute;right:56px;top:40px;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4)"></div>
+          <div style="position:absolute;right:30px;bottom:14px;width:11px;height:11px;border-radius:4px;background:rgba(255,255,255,.35)"></div>
+          <div style="font-size:13.5px;font-weight:800;color:rgba(40,25,10,.62)">{{ sprintLine }}</div>
+          <div style="font-size:29px;font-weight:900;color:#221a12;letter-spacing:-.8px;line-height:1.1;margin-top:3px">{{ freed }} GB cleaned so far</div>
+          <div style="display:flex;gap:5px;margin-top:12px">
+            <sc-for list="{{ sprintDots }}" as="d" hint-placeholder-count="7">
+              <span style="flex:1;height:6px;border-radius:3px;background:{{ d.bg }}"></span>
+            </sc-for>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:18px;font-weight:900;color:#241f1b;letter-spacing:-.3px;margin-bottom:10px">Quick wins</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ quickWins }}" as="w" hint-placeholder-count="2">
+              <button onClick="{{ w.go }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;width:100%;background:#fff;border:1px solid #EFE2CC;border-radius:999px;padding:13px 16px;box-shadow:0 1px 6px rgba(120,90,50,.06)" style-hover="transform:translateY(-1px);box-shadow:0 6px 16px rgba(120,90,50,.13)">
+                <span style="width:11px;height:11px;border-radius:50%;flex:none;background:{{ w.dot }}"></span>
+                <span style="font-size:15.5px;font-weight:800;color:#241f1b">{{ w.label }} · {{ w.count }}</span>
+                <span style="flex:1"></span>
+                <span style="font-size:15px;font-weight:900;color:#C77A1E;background:#FBEFD9;border-radius:999px;padding:4px 11px">{{ w.gb }} GB</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="flex:1"></div>
+
+        <button onClick="{{ startCleaning }}" style="all:unset;box-sizing:border-box;cursor:pointer;text-align:center;width:100%;padding:19px;border-radius:22px;background:linear-gradient(100deg,#E9A02C,#F0705F 55%,#EA4C93);color:#fff;font-size:19.5px;font-weight:900;letter-spacing:-.3px;box-shadow:0 10px 26px rgba(234,90,120,.34)" style-hover="filter:brightness(1.04)" style-active="transform:scale(.985)">{{ ctaLabel }}</button>
+        <div style="height:104px;flex:none"></div>
+      </div>
+    </sc-if>
+
+    <!-- REVIEW (duplicates / screenshots) -->
+    <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;overflow:hidden;padding:16px 22px 0;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button onClick="{{ goHome }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:36px;height:36px;min-width:36px;border-radius:50%;background:#F4E8D4;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#241f1b">‹</button>
+          <div>
+            <div style="font-size:22px;font-weight:900;color:#241f1b;letter-spacing:-.4px;line-height:1.1">{{ reviewTitle }}</div>
+            <div style="font-size:13px;font-weight:700;color:#9c8d7c">{{ reviewSub }}</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;overflow-y:auto;padding-bottom:120px">
+          <sc-for list="{{ reviewItems }}" as="it" hint-placeholder-count="4">
+            <div style="display:flex;align-items:center;gap:12px;width:100%;background:#fff;border:2px solid {{ it.border }};border-radius:20px;padding:12px;box-sizing:border-box">
+              <button onClick="{{ it.open }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:14px;flex:1;min-width:0">
+                <span style="flex:none;width:64px;height:64px;border-radius:14px;background:repeating-linear-gradient(135deg,#EFE6D8 0 7px,#E4D8C6 7px 14px);display:flex;align-items:flex-end;justify-content:center;font:400 7.5px 'IBM Plex Mono',monospace;color:#8b7d6d;padding-bottom:4px;box-sizing:border-box">photo</span>
+                <span style="display:flex;flex-direction:column;gap:3px;align-items:flex-start;min-width:0">
+                  <span style="font-size:15.5px;font-weight:800;color:#241f1b">{{ it.title }}</span>
+                  <span style="font-size:13px;font-weight:700;color:#9c8d7c">{{ it.meta }}</span>
+                  <span style="font-size:12px;font-weight:800;color:#C77A1E">Review photos ›</span>
+                </span>
+              </button>
+              <button onClick="{{ it.toggle }}" style="all:unset;cursor:pointer;flex:none;font-size:13.5px;font-weight:900;color:{{ it.pillText }};background:{{ it.pillBg }};border-radius:999px;padding:8px 13px;white-space:nowrap">{{ it.pillLabel }}</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="position:absolute;left:22px;right:22px;bottom:108px">
+          <button onClick="{{ goQueue }}" style="all:unset;box-sizing:border-box;cursor:pointer;text-align:center;width:100%;padding:17px;border-radius:20px;background:#241f1b;color:#fff;font-size:16.5px;font-weight:900;box-shadow:0 10px 24px rgba(36,31,27,.28)">Review queue · {{ queueCount }} items · {{ queueGb }} GB</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- DETAIL: individual photos in a group -->
+    <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;overflow:hidden;padding:16px 22px 0;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button onClick="{{ closeDetail }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:36px;height:36px;min-width:36px;border-radius:50%;background:#F4E8D4;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#241f1b">‹</button>
+          <div style="min-width:0">
+            <div style="font-size:21px;font-weight:900;color:#241f1b;letter-spacing:-.4px;line-height:1.1">{{ detailTitle }}</div>
+            <div style="font-size:12.5px;font-weight:700;color:#9c8d7c">{{ detailSub }}</div>
+          </div>
+          <div style="flex:1"></div>
+          <button onClick="{{ detailBulk }}" style="all:unset;cursor:pointer;flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;background:#241f1b;border-radius:14px;padding:9px 13px" style-hover="filter:brightness(1.15)">
+            <span style="font-size:13px;font-weight:900;color:#fff;white-space:nowrap">{{ detailBulkLabel }}</span>
+            <span style="font-size:9.5px;font-weight:700;color:rgba(255,255,255,.6);white-space:nowrap">{{ detailBulkHint }}</span>
+          </button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;overflow-y:auto;padding-bottom:172px">
+          <sc-for list="{{ detailPhotos }}" as="p" hint-placeholder-count="4">
+            <div style="position:relative;display:flex;flex-direction:column;background:#fff;border:2px solid {{ p.ring }};border-radius:18px;padding:9px;box-sizing:border-box">
+              <button onClick="{{ p.open }}" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:7px">
+                <span style="position:relative;display:block;height:126px;border-radius:12px;background:repeating-linear-gradient(135deg,#EFE6D8 0 8px,#E4D8C6 8px 16px);opacity:{{ p.dim }}">
+                  <span style="position:absolute;left:7px;bottom:7px;font:400 8px 'IBM Plex Mono',monospace;color:#8b7d6d">photo preview</span>
+                  <span style="position:absolute;right:7px;top:7px;font-size:11px;font-weight:900;color:{{ p.badgeText }};background:{{ p.badgeBg }};border-radius:999px;padding:4px 9px">{{ p.badge }}</span>
+                </span>
+                <span style="font-size:13.5px;font-weight:800;color:#241f1b">{{ p.title }}</span>
+                <span style="font-size:11.5px;font-weight:700;color:#9c8d7c">{{ p.note }}</span>
+              </button>
+              <button onClick="{{ p.toggle }}" style="all:unset;cursor:pointer;position:absolute;left:16px;top:16px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 1px 4px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:{{ p.quickColor }}">{{ p.quickGlyph }}</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="position:absolute;left:22px;right:22px;bottom:108px">
+          <button onClick="{{ goQueue }}" style="all:unset;box-sizing:border-box;cursor:pointer;text-align:center;width:100%;padding:12px 16px;border-radius:16px;background:#241f1b;color:#fff;font-size:14px;font-weight:900;box-shadow:0 8px 20px rgba(36,31,27,.24)">{{ detailQueuedCount }} queued here · {{ queueGb }} GB total ›</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- QUEUE -->
+    <sc-if value="{{ isQueue }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;overflow:hidden;padding:16px 22px 0;display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button onClick="{{ goHome }}" style="all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:36px;height:36px;min-width:36px;border-radius:50%;background:#F4E8D4;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#241f1b">‹</button>
+          <div style="font-size:22px;font-weight:900;color:#241f1b;letter-spacing:-.4px">Delete queue</div>
+        </div>
+
+        <div style="border-radius:22px;padding:20px;background:linear-gradient(105deg,#F0A63C,#EE6F86);color:#221a12">
+          <div style="font-size:13.5px;font-weight:800;opacity:.65">Ready to free</div>
+          <div style="font-size:36px;font-weight:900;letter-spacing:-1px;line-height:1.1">{{ queueGb }} GB</div>
+          <div style="font-size:13.5px;font-weight:800;opacity:.65">{{ queueCount }} items · goes to Recently Deleted</div>
+        </div>
+
+        <sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="border:2px dashed #E5D5BC;border-radius:20px;padding:30px 20px;text-align:center;font-size:14.5px;font-weight:700;color:#9c8d7c">Nothing queued yet.<br>Pick items in Duplicates or Screenshots.</div>
+        </sc-if>
+
+        <div style="display:flex;flex-direction:column;gap:10px;overflow-y:auto;padding-bottom:180px">
+          <sc-for list="{{ queueItems }}" as="q" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #EFE2CC;border-radius:18px;padding:11px 14px">
+              <span style="flex:none;width:46px;height:46px;border-radius:12px;background:repeating-linear-gradient(135deg,#EFE6D8 0 7px,#E4D8C6 7px 14px)"></span>
+              <span style="display:flex;flex-direction:column">
+                <span style="font-size:15px;font-weight:800;color:#241f1b">{{ q.title }}</span>
+                <span style="font-size:12.5px;font-weight:700;color:#9c8d7c">{{ q.meta }}</span>
+              </span>
+              <span style="flex:1"></span>
+              <button onClick="{{ q.remove }}" style="all:unset;cursor:pointer;font-size:13px;font-weight:900;color:#9c8d7c;padding:6px 8px">Keep</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="position:absolute;left:22px;right:22px;bottom:108px">
+          <button onClick="{{ confirmDelete }}" style="all:unset;box-sizing:border-box;cursor:pointer;text-align:center;width:100%;padding:18px;border-radius:20px;background:{{ confirmBg }};color:#fff;font-size:17.5px;font-weight:900;box-shadow:0 10px 24px rgba(214,63,63,.25)">{{ confirmLabel }}</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- SETTINGS -->
+    <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;overflow-y:auto;padding:16px 22px 130px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-size:26px;font-weight:900;color:#241f1b;letter-spacing:-.6px">Settings</div>
+        <div style="font-size:12px;font-weight:900;letter-spacing:1px;color:#A8998A">PHOTO LIBRARY ACCESS</div>
+        <div style="background:#fff;border:1px solid #EFE2CC;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;gap:6px;background:#F7EEDF;border-radius:14px;padding:4px">
+            <sc-for list="{{ accessOptions }}" as="a" hint-placeholder-count="3">
+              <button onClick="{{ a.pick }}" style="all:unset;cursor:pointer;flex:1;text-align:center;padding:10px 4px;border-radius:11px;background:{{ a.bg }};color:{{ a.color }};font-size:12.5px;font-weight:900;box-shadow:{{ a.shadow }}">{{ a.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:12.5px;font-weight:700;color:#9c8d7c;line-height:1.4">{{ accessHint }}</div>
+        </div>
+
+        <div style="font-size:12px;font-weight:900;letter-spacing:1px;color:#A8998A">SCAN &amp; CLEANUP</div>
+        <div style="background:#fff;border:1px solid #EFE2CC;border-radius:20px;padding:14px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15.5px;font-weight:800;color:#241f1b">Rescan library</div>
+            <div style="font-size:12.5px;font-weight:700;color:#9c8d7c">Last scan {{ lastScan }}</div>
+          </div>
+          <button onClick="{{ rescan }}" style="all:unset;cursor:pointer;flex:none;background:#241f1b;color:#fff;border-radius:13px;padding:11px 15px;font-size:13.5px;font-weight:900;white-space:nowrap">{{ rescanLabel }}</button>
+        </div>
+
+        <div style="font-size:12px;font-weight:900;letter-spacing:1px;color:#A8998A">NOTIFICATIONS</div>
+        <div style="background:#fff;border:1px solid #EFE2CC;border-radius:20px;padding:14px;display:flex;align-items:center;gap:12px">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15.5px;font-weight:800;color:#241f1b">Weekly cleanup reminder</div>
+            <div style="font-size:12.5px;font-weight:700;color:#9c8d7c">{{ remindHint }}</div>
+          </div>
+          <button onClick="{{ toggleRemind }}" style="all:unset;cursor:pointer;flex:none;width:52px;height:31px;border-radius:999px;background:{{ remindBg }};position:relative">
+            <span style="position:absolute;top:3px;left:{{ remindKnob }};width:25px;height:25px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25)"></span>
+          </button>
+        </div>
+        <sc-if value="{{ remindOn }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff;border:1px solid #EFE2CC;border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:12px;margin-top:-6px;animation:popIn .2s ease both">
+            <div>
+              <div style="font-size:12px;font-weight:900;letter-spacing:.6px;color:#A8998A;margin-bottom:8px">DAY</div>
+              <div style="display:flex;gap:5px">
+                <sc-for list="{{ remindDays }}" as="d" hint-placeholder-count="7">
+                  <button onClick="{{ d.pick }}" style="all:unset;cursor:pointer;flex:1;text-align:center;padding:9px 0;border-radius:11px;background:{{ d.bg }};color:{{ d.color }};font-size:12px;font-weight:900">{{ d.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:900;letter-spacing:.6px;color:#A8998A;margin-bottom:8px">TIME</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <sc-for list="{{ remindTimes }}" as="t" hint-placeholder-count="4">
+                  <button onClick="{{ t.pick }}" style="all:unset;cursor:pointer;padding:9px 14px;border-radius:12px;background:{{ t.bg }};color:{{ t.color }};font-size:13px;font-weight:900;border:1.5px solid {{ t.border }}">{{ t.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="font-size:12px;font-weight:900;letter-spacing:1px;color:#A8998A">PRIVACY</div>
+        <div style="flex:none;background:#fff;border:1px solid #EFE2CC;border-radius:20px;overflow:hidden">
+          <button onClick="{{ openPolicy }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-bottom:1px solid #F4EADA">
+            <span style="display:flex;flex-direction:column;gap:2px;align-items:flex-start">
+              <span style="font-size:15.5px;font-weight:800;color:#241f1b">Privacy policy</span>
+              <span style="font-size:12.5px;font-weight:700;color:#9c8d7c">Scanning happens on-device — nothing is uploaded</span>
+            </span>
+            <span style="font-size:15px;font-weight:900;color:#C0B3A3">›</span>
+          </button>
+          <button onClick="{{ clearScanData }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px">
+            <span style="display:flex;flex-direction:column;gap:2px;align-items:flex-start">
+              <span style="font-size:15.5px;font-weight:800;color:#D63F3F">Clear local scan data</span>
+              <span style="font-size:12.5px;font-weight:700;color:#9c8d7c">Deletes the index only — never your photos</span>
+            </span>
+            <span style="font-size:13px;font-weight:900;color:#9c8d7c;white-space:nowrap">{{ scanDataSize }}</span>
+          </button>
+        </div>
+
+        <div style="font-size:12px;font-weight:900;letter-spacing:1px;color:#A8998A">SUPPORT</div>
+        <div style="flex:none;background:#fff;border:1px solid #EFE2CC;border-radius:20px;overflow:hidden">
+          <button onClick="{{ toggleHowDelete }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:space-between;padding:15px 16px">
+            <span style="display:flex;flex-direction:column;gap:2px;align-items:flex-start">
+              <span style="font-size:15.5px;font-weight:800;color:#241f1b">How deletion works</span>
+              <span style="font-size:12.5px;font-weight:700;color:#9c8d7c">Recently Deleted keeps everything for 30 days</span>
+            </span>
+            <span style="font-size:15px;font-weight:900;color:#C0B3A3">{{ howDeleteChevron }}</span>
+          </button>
+          <sc-if value="{{ howDeleteOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:0 16px 15px;font-size:13px;font-weight:700;color:#8b7d6d;line-height:1.5">Queued photos move to your iPhone’s Recently Deleted album, where iOS keeps them for 30 days before removing them. PicTriage never deletes permanently and never uploads a photo.</div>
+          </sc-if>
+          <button onClick="{{ rateApp }}" style="all:unset;box-sizing:border-box;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-top:1px solid #F4EADA">
+            <span style="display:flex;flex-direction:column;gap:2px;align-items:flex-start">
+              <span style="font-size:15.5px;font-weight:800;color:#241f1b">Rate PicTriage</span>
+              <span style="font-size:12.5px;font-weight:700;color:#9c8d7c">Takes 20 seconds · helps a lot</span>
+            </span>
+            <span style="font-size:15px;font-weight:900;color:#C0B3A3">›</span>
+          </button>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-top:1px solid #F4EADA">
+            <span style="font-size:15.5px;font-weight:800;color:#241f1b">App version</span>
+            <span style="font-size:14px;font-weight:700;color:#9c8d7c">1.0.0</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- PHOTO PREVIEW -->
+    <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;background:rgba(24,18,12,.82);backdrop-filter:blur(6px);display:flex;flex-direction:column;padding:52px 20px 26px;box-sizing:border-box;animation:popIn .2s ease both;z-index:5">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <button onClick="{{ closePreview }}" style="all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900">✕</button>
+          <span style="font-size:13px;font-weight:800;color:rgba(255,255,255,.7)">{{ previewIndex }}</span>
+          <div style="display:flex;gap:7px">
+            <button onClick="{{ previewFirst }}" style="all:unset;cursor:pointer;height:34px;padding:0 12px;border-radius:17px;background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;gap:5px;opacity:{{ previewFirstOpacity }}">⇤ First</button>
+            <button onClick="{{ previewLast }}" style="all:unset;cursor:pointer;height:34px;padding:0 12px;border-radius:17px;background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:900;display:flex;align-items:center;gap:5px;opacity:{{ previewLastOpacity }}">Last ⇥</button>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;align-items:center;gap:10px;margin:14px 0">
+          <button onClick="{{ previewPrev }}" style="all:unset;cursor:pointer;flex:none;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900">‹</button>
+          <div style="flex:1;height:100%;border-radius:18px;background:repeating-linear-gradient(135deg,#EFE6D8 0 10px,#E4D8C6 10px 20px);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;font:400 9px 'IBM Plex Mono',monospace;color:#8b7d6d">full-size photo preview</div>
+          <button onClick="{{ previewNext }}" style="all:unset;cursor:pointer;flex:none;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900">›</button>
+        </div>
+        <div style="color:#fff">
+          <div style="font-size:19px;font-weight:900;letter-spacing:-.3px">{{ previewTitle }}</div>
+          <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.62);margin-top:2px">{{ previewMeta }}</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button onClick="{{ closePreview }}" style="all:unset;box-sizing:border-box;cursor:pointer;text-align:center;flex:1;padding:15px;border-radius:18px;background:rgba(255,255,255,.16);color:#fff;font-size:15.5px;font-weight:900">Keep</button>
+          <button onClick="{{ previewToggle }}" style="all:unset;box-sizing:border-box;cursor:pointer;text-align:center;flex:1.4;padding:15px;border-radius:18px;background:{{ previewActionBg }};color:{{ previewActionText }};font-size:15.5px;font-weight:900">{{ previewActionLabel }}</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- BOTTOM NAV -->
+    <div style="position:absolute;left:16px;right:16px;bottom:18px;height:72px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border:1px solid #F0E3CE;border-radius:30px;box-shadow:0 12px 30px rgba(90,65,35,.16);display:flex;align-items:center;justify-content:space-between;padding:0 10px;box-sizing:border-box">
+      <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.go }}" style="all:unset;cursor:pointer;position:relative;flex:1;height:56px;border-radius:22px;background:{{ n.bg }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px">
+          {{ n.icon }}
+          <span style="font-size:9.5px;font-weight:900;letter-spacing:.1px;color:{{ n.color }}">{{ n.label }}</span>
+          <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:5px;right:12px;min-width:17px;height:17px;border-radius:999px;background:#EA4C93;color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 4px;box-sizing:border-box">{{ n.badge }}</span>
+          </sc-if>
+        </button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:24px;right:24px;bottom:108px;background:#241f1b;color:#fff;border-radius:18px;padding:15px 18px;font-size:15px;font-weight:800;text-align:center;animation:popIn .25s ease both">{{ toast }}</div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:470,&quot;height&quot;:920},&quot;ctaLabel&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Let's Clean!&quot;,&quot;Keep the streak going&quot;,&quot;Start Cleaning&quot;,&quot;Free up 2.7 GB now&quot;],&quot;default&quot;:&quot;Let's Clean!&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    tab: 'home', reviewKind: 'duplicates', reviewed: 18, dayOf: 3, sprintDays: 7, freed: 3.1,
+    queue: [], toast: null, confirmed: false
+  };
+
+  group(id, title, meta, n, per, bestNote) {
+    const photos = [];
+    for (let i = 0; i < n; i++) {
+      photos.push({ id: `${id}-${i}`, title: `${title.split(' · ')[0]} ${i + 1}`, gb: per, best: i === 0, note: i === 0 ? bestNote : 'near-duplicate' });
+    }
+    return { id, title, meta, gb: +(per * (n - 1)).toFixed(2), photos };
+  }
+
+  get dupes() {
+    return [
+      this.group('d1', 'Beach burst · 6 shots', 'Aug 24 · 6 photos', 6, 0.084, 'sharpest'),
+      this.group('d2', 'Coffee table · 4 shots', 'Aug 22 · 4 photos', 4, 0.06, 'best exposure'),
+      this.group('d3', 'Sunset pano · 3 shots', 'Aug 19 · 3 photos', 3, 0.305, 'widest crop'),
+      this.group('d4', 'Dog park · 8 shots', 'Aug 17 · 8 photos', 8, 0.085, 'eyes open')
+    ];
+  }
+  get shots() {
+    return [
+      { id: 's1', title: 'Receipts', meta: 'Aug 25 · 3 screenshots', gb: 0.33, photos: [
+        { id: 's1-0', title: 'Lunch receipt', gb: 0.11, note: '1170×2532' },
+        { id: 's1-1', title: 'Taxi receipt', gb: 0.11, note: '1170×2532' },
+        { id: 's1-2', title: 'Store receipt', gb: 0.11, note: '1170×2532' } ] },
+      { id: 's2', title: 'Maps & directions', meta: 'Aug 23 · 2 screenshots', gb: 0.18, photos: [
+        { id: 's2-0', title: 'Route to airport', gb: 0.09, note: '1170×2532' },
+        { id: 's2-1', title: 'Parking pin', gb: 0.09, note: '1170×2532' } ] },
+      { id: 's3', title: 'Chats', meta: 'Aug 21 · 3 screenshots', gb: 0.42, photos: [
+        { id: 's3-0', title: 'Group chat', gb: 0.14, note: '1170×2532' },
+        { id: 's3-1', title: 'Address DM', gb: 0.14, note: '1170×2532' },
+        { id: 's3-2', title: 'Meme thread', gb: 0.14, note: '1170×2532' } ] },
+      { id: 's4', title: 'Tickets & passes', meta: 'Aug 18 · 2 screenshots', gb: 0.24, photos: [
+        { id: 's4-0', title: 'Boarding pass', gb: 0.12, note: '1170×2532' },
+        { id: 's4-1', title: 'Concert ticket', gb: 0.12, note: '1170×2532' } ] }
+    ];
+  }
+
+  icon(kind, color) {
+    const s = { width: 21, height: 21, viewBox: '0 0 24 24', fill: 'none', stroke: color, strokeWidth: 2.1, strokeLinecap: 'round', strokeLinejoin: 'round' };
+    const paths = {
+      home: ['M3 10.5 12 3.5l9 7M5.5 9.5V20h13V9.5'],
+      dupes: ['M8.5 3.5h9a2 2 0 0 1 2 2v9M4 8h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z'],
+      shots: ['M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2'],
+      queue: ['M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13'],
+      settings: ['M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z', 'M4 12h1.6M18.4 12H20M12 4v1.6M12 18.4V20M6.4 6.4l1.1 1.1M16.5 16.5l1.1 1.1M17.6 6.4l-1.1 1.1M7.5 16.5l-1.1 1.1']
+    }[kind];
+    return React.createElement('svg', s, paths.map((d, i) => React.createElement('path', { key: i, d })));
+  }
+
+  go(tab, reviewKind) { this.setState({ tab, reviewKind: reviewKind || this.state.reviewKind, detail: null, preview: null, toast: null, confirmed: false }); }
+
+  flash(msg) {
+    clearTimeout(this._toastT);
+    this.setState({ toast: msg });
+    this._toastT = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+
+  componentWillUnmount() { clearTimeout(this._toastT); }
+
+  toggle(item) {
+    const q = this.state.queue;
+    const has = q.some(x => x.id === item.id);
+    this.setState({ queue: has ? q.filter(x => x.id !== item.id) : q.concat([item]), confirmed: false });
+  }
+
+  toggleAll(group) {
+    const q = this.state.queue;
+    const ids = group.photos.filter(p => !p.best).map(p => p.id);
+    const allIn = ids.every(id => q.some(x => x.id === id));
+    const rest = q.filter(x => !group.photos.some(p => p.id === x.id));
+    this.setState({
+      queue: allIn ? rest : rest.concat(group.photos.filter(p => ids.includes(p.id))),
+      confirmed: false
+    });
+  }
+
+  renderVals() {
+    const st = this.state;
+    const queued = id => st.queue.some(x => x.id === id);
+    const queueGb = st.queue.reduce((a, b) => a + b.gb, 0);
+    const list = st.reviewKind === 'duplicates' ? this.dupes : this.shots;
+    const accent = '#E89B1C';
+    const detail = st.detail ? list.find(g => g.id === st.detail) : null;
+    const pv = detail && st.preview != null ? detail.photos[st.preview] : null;
+    const day = st.remindDay ?? 'Sunday';
+    const time = st.remindTime ?? '10:00 AM';
+
+    const nav = [
+      { key: 'home', label: 'Home', icon: 'home' },
+      { key: 'duplicates', label: 'Duplicates', icon: 'dupes' },
+      { key: 'screenshots', label: 'Shots', icon: 'shots' },
+      { key: 'queue', label: 'Queue', icon: 'queue', badge: st.queue.length ? String(st.queue.length) : null },
+      { key: 'settings', label: 'Settings', icon: 'settings' }
+    ];
+    const activeKey = st.tab === 'review' ? st.reviewKind : st.tab;
+
+    return {
+      reviewed: st.reviewed,
+      dailyGoal: 25,
+      freed: st.freed.toFixed(1),
+      sprintBadge: `Day ${st.dayOf} of your cleanup sprint`,
+      sprintLine: `Your ${st.sprintDays}-day cleanup sprint · Day ${st.dayOf} of ${st.sprintDays}`,
+      sprintDots: Array.from({ length: st.sprintDays }, (_, i) => ({
+        bg: i < st.dayOf ? 'rgba(40,25,10,.55)' : 'rgba(255,255,255,.45)'
+      })),
+      goalTail: st.reviewed >= 25 ? 'Today’s goal is done — anything else is bonus.' : `${25 - st.reviewed} more and today’s goal is done.`,
+      ringDash: `${(276.5 * Math.min(st.reviewed, 25)) / 25} 276.5`,
+      ctaLabel: this.props.ctaLabel ?? "Let's Clean!",
+      isHome: st.tab === 'home', isReview: st.tab === 'review' && !detail, isDetail: st.tab === 'review' && !!detail,
+      isQueue: st.tab === 'queue', isSettings: st.tab === 'settings',
+      quickWins: [
+        { label: 'Duplicates', count: 312, gb: '1.8', dot: '#E89B1C', go: () => this.go('review', 'duplicates') },
+        { label: 'Screenshots', count: 198, gb: '0.9', dot: '#D9722A', go: () => this.go('review', 'screenshots') }
+      ],
+      startCleaning: () => this.go('review', 'duplicates'),
+      goHome: () => this.go('home'),
+      goQueue: () => this.go('queue'),
+      noop: () => this.setState({ toast: 'Paywall lives here — later.' }),
+      reviewTitle: st.reviewKind === 'duplicates' ? 'Duplicates' : 'Screenshots',
+      reviewSub: st.reviewKind === 'duplicates' ? '312 in 78 groups · 1.8 GB' : '198 screenshots · 0.9 GB',
+      reviewItems: list.map(it => {
+        const nQ = it.photos.filter(p => queued(p.id)).length;
+        return {
+          title: it.title,
+          meta: `${it.meta} · ${it.gb.toFixed(2)} GB`,
+          border: nQ ? accent : '#EFE2CC',
+          pillLabel: nQ ? `${nQ} queued` : 'Queue all',
+          pillBg: nQ ? accent : '#F7EEDF',
+          pillText: nQ ? '#fff' : '#8b7d6d',
+          open: () => this.setState({ detail: it.id, toast: null }),
+          toggle: () => this.toggleAll(it)
+        };
+      }),
+      detailOpen: !!detail,
+      detailTitle: detail ? detail.title : '',
+      detailSub: detail ? `${detail.photos.length} photos · tap to preview, ＋ to queue` : '',
+      detailPhotos: detail ? detail.photos.map((p, i) => {
+        const inQ = queued(p.id);
+        return {
+          open: () => this.setState({ preview: i }),
+          title: p.title,
+          note: `${p.note} · ${p.gb.toFixed(2)} GB`,
+          badge: inQ ? 'Queued' : (p.best ? 'Keep · best' : 'Keep'),
+          badgeBg: inQ ? accent : (p.best ? '#2E9E6B' : '#F7EEDF'),
+          badgeText: inQ || p.best ? '#fff' : '#8b7d6d',
+          ring: inQ ? accent : (p.best ? '#2E9E6B' : '#EFE2CC'),
+          dim: inQ ? '.55' : '1',
+          quickGlyph: inQ ? '✓' : '＋',
+          quickColor: inQ ? accent : '#8b7d6d',
+          toggle: () => this.toggle(p)
+        };
+      }) : [],
+      detailQueuedCount: detail ? detail.photos.filter(p => queued(p.id)).length : 0,
+      detailBulkLabel: detail && detail.photos.filter(p => !p.best).every(p => queued(p.id)) ? 'Clear all' : 'Queue rest',
+      detailBulkHint: detail && detail.photos.some(p => p.best) ? 'keeps the best shot' : 'queues every screenshot here',
+      detailBulk: () => detail && this.toggleAll(detail),
+      closeDetail: () => this.setState({ detail: null, preview: null }),
+      previewOpen: !!pv,
+      previewTitle: pv ? pv.title : '',
+      previewMeta: pv ? `${pv.note} · ${pv.gb.toFixed(2)} GB${pv.best ? ' · flagged as the best of this set' : ''}` : '',
+      previewIndex: pv ? `${st.preview + 1} of ${detail.photos.length}` : '',
+      previewQueued: pv ? queued(pv.id) : false,
+      previewActionLabel: pv && queued(pv.id) ? 'Remove from queue' : 'Queue for deletion',
+      previewActionBg: pv && queued(pv.id) ? '#F7EEDF' : '#D63F3F',
+      previewActionText: pv && queued(pv.id) ? '#241f1b' : '#fff',
+      previewToggle: () => pv && this.toggle(pv),
+      previewFirst: () => this.setState({ preview: 0 }),
+      previewLast: () => this.setState({ preview: detail.photos.length - 1 }),
+      previewAtFirst: pv ? st.preview === 0 : false,
+      previewAtLast: pv ? st.preview === detail.photos.length - 1 : false,
+      previewFirstOpacity: pv && st.preview === 0 ? '.3' : '1',
+      previewLastOpacity: pv && st.preview === detail.photos.length - 1 ? '.3' : '1',
+      previewPrev: () => this.setState(s => ({ preview: Math.max(0, s.preview - 1) })),
+      previewNext: () => this.setState(s => ({ preview: Math.min(detail.photos.length - 1, s.preview + 1) })),
+      closePreview: () => this.setState({ preview: null }),
+      queueItems: st.queue.map(q => ({
+        title: q.title, meta: `${q.gb.toFixed(2)} GB`,
+        remove: () => this.toggle(q)
+      })),
+      queueCount: st.queue.length,
+      queueGb: queueGb.toFixed(2),
+      queueEmpty: st.queue.length === 0,
+      confirmLabel: st.confirmed ? 'Deleted ✓' : (st.queue.length ? `Delete ${st.queue.length} items` : 'Nothing to delete'),
+      confirmBg: st.confirmed ? '#2E9E6B' : (st.queue.length ? '#D63F3F' : '#CFC2AE'),
+      confirmDelete: () => {
+        if (!st.queue.length || st.confirmed) return;
+        this.setState({
+          confirmed: true, queue: [], freed: st.freed + queueGb,
+          reviewed: st.reviewed + st.queue.length
+        });
+        this.flash(`${queueGb.toFixed(2)} GB cleaned — Day ${st.dayOf} is moving.`);
+      },
+      accessOptions: ['Full Access', 'Selected Photos', 'Not Granted'].map(label => {
+        const on = (st.access ?? 'Full Access') === label;
+        return {
+          label, bg: on ? '#fff' : 'transparent', color: on ? '#241f1b' : '#9c8d7c',
+          shadow: on ? '0 1px 4px rgba(120,90,50,.18)' : 'none',
+          pick: () => this.setState({ access: label })
+        };
+      }),
+      accessHint: {
+        'Full Access': 'PicTriage can scan your whole library for duplicates and screenshots.',
+        'Selected Photos': 'Only the photos you picked are scanned. Tap Rescan after adding more.',
+        'Not Granted': 'No photos can be scanned. Grant access in iOS Settings › Privacy › Photos.'
+      }[st.access ?? 'Full Access'],
+      lastScan: st.scanning ? 'in progress…' : (st.lastScan ?? 'today, 8:12 AM'),
+      rescanLabel: st.scanning ? 'Scanning…' : 'Rescan',
+      rescan: () => {
+        if (st.scanning) return;
+        this.setState({ scanning: true });
+        setTimeout(() => { this.setState({ scanning: false, lastScan: 'just now' }); this.flash('Library rescanned · 12 new duplicates found'); }, 1400);
+      },
+      remindOn: !!st.remind,
+      remindBg: st.remind ? '#2E9E6B' : '#DFD3C1',
+      remindKnob: st.remind ? '24px' : '3px',
+      remindHint: st.remind ? `${day}s at ${time}` : 'Off — no nudges unless you turn this on',
+      toggleRemind: () => this.setState({ remind: !st.remind }),
+      remindDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((short, i) => {
+        const full = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][i];
+        const on = full === day;
+        return { label: short, bg: on ? '#241f1b' : '#F7EEDF', color: on ? '#fff' : '#8b7d6d', pick: () => this.setState({ remindDay: full }) };
+      }),
+      remindTimes: ['9:00 AM', '10:00 AM', '12:00 PM', '6:00 PM', '8:00 PM'].map(label => {
+        const on = label === time;
+        return {
+          label, bg: on ? '#FBEFD9' : '#fff', color: on ? '#C77A1E' : '#8b7d6d',
+          border: on ? '#E8B463' : '#EFE2CC', pick: () => this.setState({ remindTime: label })
+        };
+      }),
+      scanDataSize: st.scanCleared ? 'Cleared' : '46 MB',
+      clearScanData: () => { this.setState({ scanCleared: true }); this.flash('Local scan index cleared. Your photos are untouched.'); },
+      openPolicy: () => this.flash('Opens the privacy policy in Safari.'),
+      rateApp: () => this.flash('Opens the App Store review sheet.'),
+      howDeleteOpen: !!st.howDelete,
+      howDeleteChevron: st.howDelete ? '⌃' : '⌄',
+      toggleHowDelete: () => this.setState({ howDelete: !st.howDelete }),
+      toast: st.toast,
+      navItems: nav.map(n => {
+        const active = activeKey === n.key;
+        const color = active ? '#241f1b' : '#A8998A';
+        return {
+          label: n.label, badge: n.badge, color,
+          bg: active ? '#FBEFD9' : 'transparent',
+          icon: this.icon(n.icon, color),
+          go: () => (n.key === 'duplicates' || n.key === 'screenshots') ? this.go('review', n.key) : this.go(n.key)
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

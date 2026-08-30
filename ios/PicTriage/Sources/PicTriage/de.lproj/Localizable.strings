@@ -1,0 +1,135 @@
+/* PicTriage — German (de) */
+
+/* Onboarding */
+"Welcome to PicTriage" = "Willkommen bei PicTriage";
+"What should we call you?" = "Wie sollen wir dich nennen?";
+"Your name" = "Dein Name";
+"Continue" = "Weiter";
+"Skip for now" = "Vorerst überspringen";
+
+/* Greeting */
+"Good morning!" = "Guten Morgen!";
+"Good afternoon!" = "Guten Tag!";
+"Good evening!" = "Guten Abend!";
+"Good morning, %@" = "Guten Morgen, %@";
+"Good afternoon, %@" = "Guten Tag, %@";
+"Good evening, %@" = "Guten Abend, %@";
+"Let’s clear some space today" = "Schaffen wir heute etwas Platz";
+
+/* Home */
+"Day %lld of your cleanup sprint" = "Tag %lld deines Aufräum-Sprints";
+"Your %lld-day cleanup sprint · Day %lld of %lld" = "Dein %lld-tägiger Aufräum-Sprint · Tag %lld von %lld";
+"%lld of 25 photos reviewed today.\n%@" = "%lld von 25 Fotos heute durchgesehen.\n%@";
+"of 25" = "von 25";
+"Today’s goal is done — anything else is bonus." = "Das Tagesziel ist erreicht — alles Weitere ist Bonus.";
+"%lld more and today’s goal is done." = "Noch %lld, dann ist das Tagesziel erreicht.";
+"%@ GB cleaned so far" = "Bisher %@ GB freigemacht";
+"Quick wins" = "Schnelle Erfolge";
+"%@ · %lld" = "%@ · %lld";
+"%@ GB" = "%@ GB";
+"Let’s Clean!" = "Los geht’s!";
+
+/* Duplicates / Screenshots categories */
+"Duplicates" = "Duplikate";
+"Screenshots" = "Screenshots";
+"Shots" = "Fotos";
+
+/* Review list */
+"%lld in %lld groups · %@ GB" = "%lld in %lld Gruppen · %@ GB";
+"%lld screenshots · %@ GB" = "%lld Screenshots · %@ GB";
+"Scanning your library…" = "Mediathek wird durchsucht…";
+"No photo access yet.\nGrant it in Settings to scan your library." = "Noch kein Fotozugriff.\nErlaube ihn in den Einstellungen, um deine Mediathek zu durchsuchen.";
+"Nothing here yet.\nTap Rescan in Settings, or pull to try again." = "Hier ist noch nichts.\nTippe in den Einstellungen auf Erneut scannen oder ziehe zum Aktualisieren.";
+"Review queue · %lld items · %@ GB" = "Prüfliste · %lld Elemente · %@ GB";
+"%@ · %@ GB" = "%@ · %@ GB";
+"%lld queued" = "%lld vorgemerkt";
+"Queue all" = "Alle vormerken";
+"Review photos ›" = "Fotos durchsehen ›";
+
+/* Detail grid */
+"%lld photos · tap to preview, ＋ to queue" = "%lld Fotos · antippen zur Vorschau, ＋ zum Vormerken";
+"Clear all" = "Alle entfernen";
+"Queue rest" = "Rest vormerken";
+"keeps the best shot" = "behält das beste Foto";
+"queues every screenshot here" = "merkt hier jeden Screenshot vor";
+"%lld queued here · %@ GB total ›" = "%lld hier vorgemerkt · %@ GB insgesamt ›";
+"Queued" = "Vorgemerkt";
+"Keep · best" = "Behalten · beste";
+"Keep" = "Behalten";
+"Photo" = "Foto";
+
+/* Photo library scan grouping */
+"1 screenshot" = "1 Screenshot";
+"%lld screenshots" = "%lld Screenshots";
+"%@ screenshots" = "Screenshots vom %@";
+"Burst" = "Serienbild";
+"Similar shots" = "Ähnliche Fotos";
+"1 shot" = "1 Foto";
+"%lld shots" = "%lld Fotos";
+"1 photo" = "1 Foto";
+"%lld photos" = "%lld Fotos";
+"%@ · %@" = "%@ · %@";
+
+/* Preview overlay */
+"%lld of %lld" = "%lld von %lld";
+"⇤ First" = "⇤ Erstes";
+"Last ⇥" = "Letztes ⇥";
+" · flagged as the best of this set" = " · als beste dieser Gruppe markiert";
+"Remove from queue" = "Aus Liste entfernen";
+"Queue for deletion" = "Zum Löschen vormerken";
+
+/* Queue / delete */
+"Delete queue" = "Löschliste";
+"Ready to free" = "Bereit zum Freigeben";
+"%lld items · goes to Recently Deleted" = "%lld Elemente · wandert zu Kürzlich gelöscht";
+"Nothing queued yet.\nPick items in Duplicates or Screenshots." = "Noch nichts vorgemerkt.\nWähle Elemente unter Duplikate oder Screenshots aus.";
+"Deleted ✓" = "Gelöscht ✓";
+"Nothing to delete" = "Nichts zu löschen";
+"Delete %lld items" = "%lld Elemente löschen";
+"Couldn’t delete — try again." = "Löschen fehlgeschlagen — bitte erneut versuchen.";
+"%@ GB cleaned — Day %lld is moving." = "%@ GB freigemacht — Tag %lld geht weiter.";
+
+/* Bottom nav */
+"Home" = "Start";
+"Queue" = "Liste";
+"Settings" = "Einstellungen";
+
+/* Settings */
+"PHOTO LIBRARY ACCESS" = "FOTOZUGRIFF";
+"Full Access" = "Voller Zugriff";
+"Selected Photos" = "Ausgewählte Fotos";
+"Not Granted" = "Nicht erlaubt";
+"Only the photos you picked are scanned. Tap Rescan after adding more." = "Nur die von dir ausgewählten Fotos werden gescannt. Tippe nach dem Hinzufügen weiterer auf Erneut scannen.";
+"No photos can be scanned. Grant access in iOS Settings › Privacy › Photos." = "Es können keine Fotos gescannt werden. Erlaube den Zugriff in den iOS-Einstellungen › Datenschutz › Fotos.";
+"PicTriage can scan your whole library for duplicates and screenshots." = "PicTriage kann deine gesamte Mediathek nach Duplikaten und Screenshots durchsuchen.";
+"SCAN & CLEANUP" = "SCAN & AUFRÄUMEN";
+"Rescan library" = "Mediathek erneut scannen";
+"Last scan %@" = "Letzter Scan: %@";
+"just now" = "gerade eben";
+"never" = "nie";
+"Scanning…" = "Scannen…";
+"Rescan" = "Erneut scannen";
+"Grant photo access in Settings to scan your library." = "Erlaube den Fotozugriff in den Einstellungen, um deine Mediathek zu scannen.";
+"Library rescanned · %lld duplicate groups, %lld screenshot days found" = "Mediathek erneut gescannt · %lld Duplikat-Gruppen, %lld Screenshot-Tage gefunden";
+"NOTIFICATIONS" = "MITTEILUNGEN";
+"Weekly cleanup reminder" = "Wöchentliche Aufräum-Erinnerung";
+"Off — no nudges unless you turn this on" = "Aus — keine Erinnerungen, bis du das aktivierst";
+"Every %@ at %@" = "Jeden %@ um %@";
+"DAY" = "TAG";
+"TIME" = "UHRZEIT";
+"PRIVACY" = "DATENSCHUTZ";
+"Privacy policy" = "Datenschutzerklärung";
+"Scanning happens on-device — nothing is uploaded" = "Das Scannen erfolgt auf dem Gerät — nichts wird hochgeladen";
+"Clear local scan data" = "Lokale Scan-Daten löschen";
+"Deletes the index only — never your photos" = "Löscht nur den Index — niemals deine Fotos";
+"Cleared" = "Gelöscht";
+"Local scan index cleared. Your photos are untouched." = "Lokaler Scan-Index gelöscht. Deine Fotos bleiben unberührt.";
+"Opens the privacy policy in Safari." = "Öffnet die Datenschutzerklärung in Safari.";
+"SUPPORT" = "SUPPORT";
+"How deletion works" = "So funktioniert das Löschen";
+"Recently Deleted keeps everything for 30 days" = "Kürzlich gelöscht bewahrt alles 30 Tage lang auf";
+"Queued photos move to your iPhone’s Recently Deleted album, where iOS keeps them for 30 days before removing them. PicTriage never deletes permanently and never uploads a photo." = "Vorgemerkte Fotos wandern in das Album „Kürzlich gelöscht“ deines iPhones, wo iOS sie 30 Tage lang aufbewahrt, bevor sie entfernt werden. PicTriage löscht nie endgültig und lädt nie ein Foto hoch.";
+"Rate PicTriage" = "PicTriage bewerten";
+"Takes 20 seconds · helps a lot" = "Dauert 20 Sekunden · hilft sehr";
+"Opens the App Store review sheet." = "Öffnet die Bewertungsseite im App Store.";
+"App version" = "App-Version";

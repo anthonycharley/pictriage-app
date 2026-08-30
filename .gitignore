@@ -1,0 +1,10 @@
+.DS_Store
+
+# Xcode / XcodeGen (regenerate with: cd ios/PicTriage && xcodegen generate)
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+.build/
+.swiftpm/
+ios/PicTriage/Generated/

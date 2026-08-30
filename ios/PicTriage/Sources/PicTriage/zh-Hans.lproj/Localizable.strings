@@ -1,0 +1,135 @@
+/* PicTriage — Simplified Chinese (zh-Hans) */
+
+/* Onboarding */
+"Welcome to PicTriage" = "欢迎使用 PicTriage";
+"What should we call you?" = "我们该怎么称呼你？";
+"Your name" = "你的名字";
+"Continue" = "继续";
+"Skip for now" = "暂时跳过";
+
+/* Greeting */
+"Good morning!" = "早上好！";
+"Good afternoon!" = "下午好！";
+"Good evening!" = "晚上好！";
+"Good morning, %@" = "早上好，%@";
+"Good afternoon, %@" = "下午好，%@";
+"Good evening, %@" = "晚上好，%@";
+"Let’s clear some space today" = "今天来清理一些空间吧";
+
+/* Home */
+"Day %lld of your cleanup sprint" = "清理冲刺第 %lld 天";
+"Your %lld-day cleanup sprint · Day %lld of %lld" = "为期 %lld 天的清理冲刺 · 第 %lld / %lld 天";
+"%lld of 25 photos reviewed today.\n%@" = "今天已查看 25 张中的 %lld 张。\n%@";
+"of 25" = "/ 25";
+"Today’s goal is done — anything else is bonus." = "今天的目标已完成——其余都是额外收获。";
+"%lld more and today’s goal is done." = "再完成 %lld 张，今天的目标就达成了。";
+"%@ GB cleaned so far" = "目前已释放 %@ GB";
+"Quick wins" = "快速清理";
+"%@ · %lld" = "%@ · %lld";
+"%@ GB" = "%@ GB";
+"Let’s Clean!" = "开始清理！";
+
+/* Duplicates / Screenshots categories */
+"Duplicates" = "重复照片";
+"Screenshots" = "截图";
+"Shots" = "照片";
+
+/* Review list */
+"%lld in %lld groups · %@ GB" = "%2$lld 组，共 %1$lld 张 · %3$@ GB";
+"%lld screenshots · %@ GB" = "%lld 张截图 · %@ GB";
+"Scanning your library…" = "正在扫描你的照片图库…";
+"No photo access yet.\nGrant it in Settings to scan your library." = "尚未获得照片访问权限。\n请在设置中授权，以扫描你的照片图库。";
+"Nothing here yet.\nTap Rescan in Settings, or pull to try again." = "这里还没有内容。\n请在设置中点按“重新扫描”，或下拉重试。";
+"Review queue · %lld items · %@ GB" = "待查队列 · %lld 项 · %@ GB";
+"%@ · %@ GB" = "%@ · %@ GB";
+"%lld queued" = "已加入 %lld 项";
+"Queue all" = "全部加入队列";
+"Review photos ›" = "查看照片 ›";
+
+/* Detail grid */
+"%lld photos · tap to preview, ＋ to queue" = "%lld 张照片 · 点按可预览，点 ＋ 加入队列";
+"Clear all" = "全部移出";
+"Queue rest" = "其余加入队列";
+"keeps the best shot" = "保留最佳照片";
+"queues every screenshot here" = "将这里的每张截图都加入队列";
+"%lld queued here · %@ GB total ›" = "此处已加入 %lld 项 · 共 %@ GB ›";
+"Queued" = "已加入队列";
+"Keep · best" = "保留 · 最佳";
+"Keep" = "保留";
+"Photo" = "照片";
+
+/* Photo library scan grouping */
+"1 screenshot" = "1 张截图";
+"%lld screenshots" = "%lld 张截图";
+"%@ screenshots" = "%@ 的截图";
+"Burst" = "连拍";
+"Similar shots" = "相似照片";
+"1 shot" = "1 张照片";
+"%lld shots" = "%lld 张照片";
+"1 photo" = "1 张照片";
+"%lld photos" = "%lld 张照片";
+"%@ · %@" = "%@ · %@";
+
+/* Preview overlay */
+"%lld of %lld" = "第 %lld / %lld 张";
+"⇤ First" = "⇤ 第一张";
+"Last ⇥" = "最后一张 ⇥";
+" · flagged as the best of this set" = " · 已标记为该组中的最佳照片";
+"Remove from queue" = "移出队列";
+"Queue for deletion" = "加入删除队列";
+
+/* Queue / delete */
+"Delete queue" = "删除队列";
+"Ready to free" = "即将释放";
+"%lld items · goes to Recently Deleted" = "%lld 项 · 将移至“最近删除”";
+"Nothing queued yet.\nPick items in Duplicates or Screenshots." = "队列中还没有内容。\n请在“重复照片”或“截图”中选择项目。";
+"Deleted ✓" = "已删除 ✓";
+"Nothing to delete" = "没有可删除的内容";
+"Delete %lld items" = "删除 %lld 项";
+"Couldn’t delete — try again." = "删除失败，请重试。";
+"%@ GB cleaned — Day %lld is moving." = "已释放 %@ GB — 第 %lld 天在稳步推进。";
+
+/* Bottom nav */
+"Home" = "主页";
+"Queue" = "队列";
+"Settings" = "设置";
+
+/* Settings */
+"PHOTO LIBRARY ACCESS" = "照片图库访问权限";
+"Full Access" = "完全访问";
+"Selected Photos" = "部分照片";
+"Not Granted" = "未授权";
+"Only the photos you picked are scanned. Tap Rescan after adding more." = "只会扫描你选择的照片。添加更多照片后请点按“重新扫描”。";
+"No photos can be scanned. Grant access in iOS Settings › Privacy › Photos." = "无法扫描任何照片。请在 iOS 设置 › 隐私 › 照片 中授权访问。";
+"PicTriage can scan your whole library for duplicates and screenshots." = "PicTriage 可以扫描你的整个照片图库，查找重复照片和截图。";
+"SCAN & CLEANUP" = "扫描与清理";
+"Rescan library" = "重新扫描图库";
+"Last scan %@" = "上次扫描：%@";
+"just now" = "刚刚";
+"never" = "从未";
+"Scanning…" = "正在扫描…";
+"Rescan" = "重新扫描";
+"Grant photo access in Settings to scan your library." = "请在设置中授权照片访问权限，以扫描你的图库。";
+"Library rescanned · %lld duplicate groups, %lld screenshot days found" = "图库已重新扫描 · 发现 %lld 组重复照片、%lld 天的截图";
+"NOTIFICATIONS" = "通知";
+"Weekly cleanup reminder" = "每周清理提醒";
+"Off — no nudges unless you turn this on" = "已关闭 — 开启后才会提醒你";
+"Every %@ at %@" = "每周%@ %@";
+"DAY" = "星期";
+"TIME" = "时间";
+"PRIVACY" = "隐私";
+"Privacy policy" = "隐私政策";
+"Scanning happens on-device — nothing is uploaded" = "扫描在设备本地完成 — 不会上传任何内容";
+"Clear local scan data" = "清除本地扫描数据";
+"Deletes the index only — never your photos" = "仅清除索引 — 绝不会删除你的照片";
+"Cleared" = "已清除";
+"Local scan index cleared. Your photos are untouched." = "本地扫描索引已清除。你的照片不受影响。";
+"Opens the privacy policy in Safari." = "将在 Safari 中打开隐私政策。";
+"SUPPORT" = "支持";
+"How deletion works" = "删除机制说明";
+"Recently Deleted keeps everything for 30 days" = "“最近删除”会保留所有内容 30 天";
+"Queued photos move to your iPhone’s Recently Deleted album, where iOS keeps them for 30 days before removing them. PicTriage never deletes permanently and never uploads a photo." = "加入队列的照片会移至 iPhone 的“最近删除”相册，iOS 会保留 30 天后再彻底移除。PicTriage 绝不会永久删除照片，也绝不会上传任何照片。";
+"Rate PicTriage" = "给 PicTriage 评分";
+"Takes 20 seconds · helps a lot" = "只需 20 秒 · 对我们帮助很大";
+"Opens the App Store review sheet." = "将打开 App Store 评价页面。";
+"App version" = "应用版本";

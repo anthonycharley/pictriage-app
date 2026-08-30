@@ -1,0 +1,27 @@
+name: PicTriage
+options:
+  bundleIdPrefix: com.pictriage
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+targets:
+  PicTriage:
+    type: application
+    platform: iOS
+    sources:
+      - Sources/PicTriage
+    info:
+      path: Generated/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        NSPhotoLibraryUsageDescription: "PicTriage scans your photo library on-device to find duplicates and screenshots you can clean up. Nothing ever leaves your phone."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pictriage.app
+        PRODUCT_NAME: PicTriage
+        SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
