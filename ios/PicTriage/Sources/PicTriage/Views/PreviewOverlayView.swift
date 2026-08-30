@@ -7,6 +7,8 @@ struct PreviewOverlayView: View {
     @EnvironmentObject var state: AppState
     let group: PhotoGroup
 
+    @State private var photoStripFrame: CGRect = .zero
+
     private var index: Int { state.previewIndex ?? 0 }
 
     var body: some View {
@@ -18,8 +20,17 @@ struct PreviewOverlayView: View {
                     .onTapGesture { state.closePreview() }
                 VStack(spacing: 0) {
                     Color.clear.frame(height: 34)
-                    photoStrip
-                        .padding(.vertical, 14)
+                    GeometryReader { geo in
+                        PhotoThumbnailView(
+                            localIdentifier: state.previewPhoto?.id ?? "",
+                            targetSize: CGSize(width: 1200, height: 1200),
+                            contentMode: .fit
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .padding(.horizontal, 44)
+                        .preference(key: PhotoStripFrameKey.self, value: geo.frame(in: .named("previewOverlay")))
+                    }
+                    .padding(.vertical, 14)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(photo.title)
                             .font(.heading(19))
@@ -39,7 +50,19 @@ struct PreviewOverlayView: View {
                 topBar
                     .padding(.horizontal, 20)
                     .padding(.top, 52)
+
+                roundIconButton(systemName: "chevron.left") { state.previewPrev() }
+                    .opacity(index > 0 ? 1 : 0.3)
+                    .disabled(index == 0)
+                    .position(x: photoStripFrame.minX + 17, y: photoStripFrame.midY)
+
+                roundIconButton(systemName: "chevron.right") { state.previewNext() }
+                    .opacity(index < group.photos.count - 1 ? 1 : 0.3)
+                    .disabled(index == group.photos.count - 1)
+                    .position(x: photoStripFrame.maxX - 17, y: photoStripFrame.midY)
             }
+            .coordinateSpace(name: "previewOverlay")
+            .onPreferenceChange(PhotoStripFrameKey.self) { photoStripFrame = $0 }
             .transition(.opacity)
         }
     }
@@ -71,26 +94,6 @@ struct PreviewOverlayView: View {
                 pillButton(String(localized: "Last \u{21E5}"), enabled: index < group.photos.count - 1) { state.previewLast() }
             }
         }
-    }
-
-    private var photoStrip: some View {
-        HStack(spacing: 10) {
-            roundIconButton(systemName: "chevron.left") { state.previewPrev() }
-                .opacity(index > 0 ? 1 : 0.3)
-                .disabled(index == 0)
-
-            PhotoThumbnailView(
-                localIdentifier: state.previewPhoto?.id ?? "",
-                targetSize: CGSize(width: 1200, height: 1200),
-                contentMode: .fit
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-
-            roundIconButton(systemName: "chevron.right") { state.previewNext() }
-                .opacity(index < group.photos.count - 1 ? 1 : 0.3)
-                .disabled(index == group.photos.count - 1)
-        }
-        .frame(maxHeight: .infinity)
     }
 
     private func pillButton(_ label: String, enabled: Bool, action: @escaping () -> Void) -> some View {
@@ -158,4 +161,9 @@ struct PreviewOverlayView: View {
             .frame(maxWidth: .infinity)
         }
     }
+}
+
+private struct PhotoStripFrameKey: PreferenceKey {
+    static var defaultValue: CGRect = .zero
+    static func reduce(value: inout CGRect, nextValue: () -> CGRect) { value = nextValue() }
 }

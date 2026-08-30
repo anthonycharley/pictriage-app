@@ -141,6 +141,34 @@ The background-tap-to-dismiss mitigation's earlier inconsistency (worked at one 
 was likely a symptom of this same structural issue and should be re-verified as unnecessary now
 that `topBar` itself works, rather than debugged further in isolation.
 
+### ~~photoStrip left chevron (previous photo) unresponsive~~ — Also fixed, same family of bug
+Found immediately after the topBar fix above: the `chevron.left` "previous photo" button stopped
+responding (right chevron / next photo kept working fine — confirmed asymmetric, not a general
+photoStrip failure). Same diagnostic signature as the topBar bug: extensive coordinate sweep ruled
+out mis-targeting, "First" pill (also sets the index directly) proved the underlying state logic
+was fine, so this was hit-testing, not logic.
+
+Root cause is almost certainly the same nesting-depth issue as topBar — `photoStrip`'s two chevron
+buttons were still literal children of the same deeply-nested content `VStack`. Tried attaching
+`photoStrip` via `.overlay()` on a space-reserving placeholder first (cheaper, kept it inside the
+`VStack`) — did **not** fix it, confirming the issue is about being nested inside that `VStack` at
+all, not about literal child-list position.
+
+**Fix:** pulled just the two chevron buttons out to be direct `ZStack`-level siblings (same
+treatment as `topBar`), positioned via a `GeometryReader` + `PreferenceKey`
+(`PhotoStripFrameKey`) that captures the photo thumbnail's on-screen frame, so the buttons sit
+exactly at its left/right edges with no hardcoded coordinates. The thumbnail itself stays in the
+`VStack`'s normal flexible-height flow — it's not interactive, so it was never affected. Verified:
+forward, backward, and the disabled state at both ends of a 2-photo group all work correctly.
+
+**Takeaway for any future control added to this view:** don't nest new interactive elements
+directly in the content `VStack` — anything that needs to react to taps should be a direct
+`ZStack` sibling, positioned via `.position()`/alignment (with a `GeometryReader`+`PreferenceKey`
+if it needs to track another view's frame, as the chevrons do here). The underlying SwiftUI
+mechanism was never fully root-caused (Xcode's view debugger didn't show an obvious occluding
+view), but the "nested in VStack → broken, direct ZStack sibling → works" pattern held for both
+bugs found this session and is the safest working assumption going forward.
+
 ### ~~No version control~~ — Resolved
 Git is now initialized and pushed to **https://github.com/anthonycharley/pictriage-app** (branch
 `main`). Root `.gitignore` excludes `.DS_Store`, `*.xcodeproj/`, `DerivedData/`,
