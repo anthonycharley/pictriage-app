@@ -130,10 +130,11 @@ elsewhere has no such fallback yet.
 
 **This is the #1 next step** — see below.
 
-### No version control
-This project has **no git repository**. Everything so far — the design export, the backend
-implementation, all bug fixes — exists only as files on disk with no history and no way to diff,
-branch, or recover from a bad edit. Given the amount of work already done, this is a real risk.
+### ~~No version control~~ — Resolved
+Git is now initialized and pushed to **https://github.com/anthonycharley/pictriage-app** (branch
+`main`). Root `.gitignore` excludes `.DS_Store`, `*.xcodeproj/`, `DerivedData/`,
+`ios/PicTriage/Generated/`, etc. — all Xcode/XcodeGen output is regenerated via
+`xcodegen generate`, never committed.
 
 ---
 
@@ -155,10 +156,7 @@ branch, or recover from a bad edit. Given the amount of work already done, this 
      hit-target fallback — anywhere else `BackButton` is the *only* way back, so users are never
      stuck.
 
-2. **Initialize git.** This should probably happen before any further changes: `git init`, a
-   `.gitignore` for `*.xcodeproj`/`DerivedData`/`.DS_Store`, and an initial commit capturing
-   current state, so future work is diffable and revertible. Ask the user first since it's a
-   meaningful, visible change to the project structure.
+2. ~~**Initialize git.**~~ Done — pushed to https://github.com/anthonycharley/pictriage-app (`main`).
 
 3. **Real-device testing.** Everything verified so far is Simulator-only. Before considering the
    backend "done," run on a physical iPhone at least once — PhotosKit permission flows and
