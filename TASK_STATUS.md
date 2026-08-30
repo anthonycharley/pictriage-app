@@ -108,6 +108,16 @@ Replaced all sample/fake data with a real PhotosKit backend:
 
 ---
 
+### App icon (this session)
+Designed 4 concept directions (Sorted Stack, Triage Funnel, Progress Ring, PT Monogram) as an
+Artifact, built entirely from colors already in `Theme.swift` — nothing new introduced. User
+picked **PT Monogram**. Rendered at true 1024×1024 with Pillow (not a browser screenshot — those
+came back scaled/soft) and wired into a proper `Assets.xcassets/AppIcon.appiconset` with the
+modern single-size "universal" 1024 entry (supported since Xcode 14 for iOS 16+ targets, no need
+for the old full icon-size matrix). `project.yml` now sets
+`ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon`. Verified showing correctly on the Simulator Home
+Screen with iOS's own squircle mask applied.
+
 ## 3. Active Blockers
 
 ### ~~`BackButton` (non-modal screens) unresponsive~~ — False alarm, resolved
@@ -210,8 +220,8 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
      in `String(localized:)`, add a matching key to each `Localizable.strings`) is already in
      place and mechanical to extend.
 
-6. **Not started at all:** app icon, launch screen content, App Store metadata/screenshots,
-   TestFlight setup. Flagging so it's not forgotten, not because it's urgent right now.
+6. ~~App icon~~ Done — see below. **Still not started:** launch screen content, App Store
+   metadata/screenshots, TestFlight setup.
 
 ---
 
