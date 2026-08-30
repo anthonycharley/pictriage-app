@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A real, in-app privacy policy — no hosted URL required. Content here
+/// A real, in-app privacy policy that needs no hosted URL. Content here
 /// should stay accurate to what the app actually does; verified against the
 /// codebase (no network calls, no analytics, no third-party SDKs) before writing this.
 struct PrivacyPolicyView: View {
@@ -15,7 +15,7 @@ struct PrivacyPolicyView: View {
         [
             Section(
                 title: String(localized: "Everything happens on your device"),
-                body: String(localized: "PicTriage scans your photo library, finds duplicates and screenshots, and generates thumbnails entirely on your iPhone. Nothing is uploaded, and the app makes no network requests of any kind \u{2014} there is no server, no analytics, and no third-party tracking built into PicTriage.")
+                body: String(localized: "PicTriage scans your photo library, finds duplicates and screenshots, and generates thumbnails entirely on your iPhone. Nothing gets uploaded. The app doesn't make network requests of any kind, so there's no server, no analytics, and no third-party tracking to worry about.")
             ),
             Section(
                 title: String(localized: "What PicTriage can see"),
@@ -27,15 +27,15 @@ struct PrivacyPolicyView: View {
             ),
             Section(
                 title: String(localized: "What's stored, and where"),
-                body: String(localized: "Your cleanup streak, scan history, and settings are stored locally on your device using iOS's standard app storage. None of it is backed up to any service PicTriage controls \u{2014} if you use iCloud or iTunes/Finder backups, that's Apple's normal device backup, not something PicTriage does on its own.")
+                body: String(localized: "Your cleanup streak, scan history, and settings are stored locally on your device using iOS's standard app storage. None of it is backed up to any service PicTriage controls. If you use iCloud or iTunes/Finder backups, that's just Apple's normal device backup doing its thing, not something PicTriage sets up on its own.")
             ),
             Section(
                 title: String(localized: "Notifications"),
-                body: String(localized: "If you turn on the weekly cleanup reminder, PicTriage schedules a local notification on your device using iOS's notification system. This never involves a push server \u{2014} the reminder is set and delivered entirely on-device.")
+                body: String(localized: "If you turn on the weekly cleanup reminder, PicTriage schedules a local notification on your device using iOS's notification system. There's no push server involved. The reminder is set and delivered entirely on your device.")
             ),
             Section(
                 title: String(localized: "Questions"),
-                body: String(localized: "PicTriage is built by a solo developer with one rule: your photos are yours, and they stay on your phone. If anything here is unclear, that's a bug in this page — the code itself has no network access to misuse, which you're welcome to verify yourself.")
+                body: String(localized: "PicTriage is built by a solo developer with one rule: your photos are yours, and they stay on your phone. If anything here is unclear, that's a bug in this page, not in the app. The code itself has no network access to misuse, and you're welcome to check that yourself.")
             ),
         ]
     }
