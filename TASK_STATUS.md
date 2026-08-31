@@ -1,6 +1,7 @@
 # PicTriage — Task Status
 
-**Last updated:** 2026-08-30 (session covering: backend build, bug fixes, personalization, localization)
+**Last updated:** 2026-08-31 (session covering: real-device feedback fixes, in progress — see §4 for
+exactly where to pick up)
 **Maintainer convention:** This file is a living hand-off doc. At the end of any session that makes
 non-trivial progress, update it — move finished items into "Completed," add new findings to
 "Blockers," and rewrite "Next Steps" so the next session (with zero memory of this one) can pick up
@@ -194,6 +195,24 @@ checking in first. Status:
 6. **Slight lag switching between Duplicates and Screenshots tabs.** **Not started** — worth
    profiling before guessing at a fix.
 
+**>>> PICK UP HERE: item 3 (swipe gesture in preview) is next.** The user is working through this
+list one item at a time and explicitly wants to confirm before moving to the next — don't batch
+the rest. Last message before this handoff was the user asking for a session handoff note, not a
+go-ahead on #3, so **ask before starting #3**, don't assume the go-ahead carried over.
+
+### Home screen card-width mismatch (unrelated one-off, fixed same session)
+Separate from the 6-item list above — the user separately reported the "0 of 25" progress card and
+the "GB cleaned so far" gradient card weren't the same width on Home. Root cause: `reviewCard`'s
+`HStack` had no `.frame(maxWidth: .infinity)` (sprintCard had one, reviewCard didn't), so it
+shrink-wrapped to content instead of matching. One-line fix, verified in Simulator.
+
+### Housekeeping: project-scope Claude Code config added (this session)
+Ran the `/auto-mode-setup` wizard (posture=mixed, scope=project, depth=shell) and committed the
+result to `.claude/settings.json` — an `autoMode.environment` array (inherits built-in defaults via
+`"$defaults"`, then appends this repo's specifics: public visibility, no org/cloud/CI config on
+file, only-this-repo's-own-work-is-safe-to-push reminder). Not application code, just harness
+config; mentioning it so a fresh session isn't surprised by a new top-level `.claude/` directory.
+
 ## 3. Active Blockers
 
 ### ~~`BackButton` (non-modal screens) unresponsive~~ — False alarm, resolved
@@ -271,9 +290,10 @@ Git is now initialized and pushed to **https://github.com/anthonycharley/pictria
 
 2. ~~**Initialize git.**~~ Done — pushed to https://github.com/anthonycharley/pictriage-app (`main`).
 
-3. **Real-device testing.** Everything verified so far is Simulator-only. Before considering the
-   backend "done," run on a physical iPhone at least once — PhotosKit permission flows and
-   thumbnail loading in particular can behave subtly differently than in Simulator.
+3. ~~Real-device testing~~ Done, in progress — the user has run it on their own iPhone and given a
+   6-item feedback list (see §2 "Real-device testing feedback"). 2 of 6 fixed so far
+   (onboarding logo, preview top-spacing). **Next: item 3, the swipe gesture — ask the user before
+   starting it, per their explicit one-at-a-time workflow.**
 
 4. ~~Fake settings rows~~ ~~Fixed-preset time picker~~ Done — see above/below. **Still
    remaining, lower priority:**
