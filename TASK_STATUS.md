@@ -172,9 +172,13 @@ checking in first. Status:
 1. ~~**Onboarding felt cold, no logo.**~~ Fixed — added the PT Monogram app icon above "Welcome to
    PicTriage" (new `AppLogo` image asset; `AppIcon`'s catalog entry isn't reliably loadable via
    plain `Image()` in SwiftUI, hence a separate asset rather than reusing the App Icon set).
-2. **Preview screen has excess empty space at the top on a real device** — doesn't fit the screen
-   naturally. Not yet investigated; Simulator testing never caught this, so likely a real-device
-   safe-area/notch difference from what Simulator reports. **Not started.**
+2. ~~**Preview screen has excess empty space at the top.**~~ Fixed — turned out to be reproducible
+   in Simulator too once compared side-by-side with other screens, not actually a real-device-only
+   issue. Root cause: `PreviewOverlayView`'s content `.padding(.top, 52)` (both the content `VStack`
+   and `topBar`) was stacked on top of the automatic safe-area inset it already gets — a leftover
+   from the original web prototype's CSS, which had no separate safe-area concept to double up
+   with. Every other screen in the app uses `16` for this same purpose; changed both instances to
+   match.
 3. **No swipe gesture in the photo preview** — currently only the left/right chevron buttons
    navigate between photos; user wants to swipe left/right too. **Not started.**
 4. **Preview reliability**: sometimes the photo doesn't render in the preview at all; sometimes
