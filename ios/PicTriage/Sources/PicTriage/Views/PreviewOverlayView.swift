@@ -44,12 +44,12 @@ struct PreviewOverlayView: View {
                         .padding(.top, 16)
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 52)
+                .padding(.top, 16)
                 .padding(.bottom, 26)
 
                 topBar
                     .padding(.horizontal, 20)
-                    .padding(.top, 52)
+                    .padding(.top, 16)
 
                 roundIconButton(systemName: "chevron.left") { state.previewPrev() }
                     .opacity(index > 0 ? 1 : 0.3)
